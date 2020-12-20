@@ -1,0 +1,22 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    صفحه اصلی
+{% endblock %}
+
+{% block dashboard_name %}
+    <small>به</small>
+    سامانه آزمون
+    مهدی یار
+    <small><span class="badge badge-pill badge-dark">نسخه 1.2</span></small>
+    <small>خوش آمدید!</small>
+{% endblock %}
+
+
+{% block first_card_place %}
+    {% include 'dashboard/_dashboard_card.html' with home_page=True %}
+{% endblock %}
+
+{% block second_card_place %}
+    {% include 'dashboard/_dashboard_card_second.html' with card_title='اخبار و اطلاعیه ها' %}
+{% endblock %}

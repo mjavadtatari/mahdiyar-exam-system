@@ -1,0 +1,28 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    صفحه پیدا نشد!
+    | 404
+{% endblock %}
+
+{% block dashboard_content %}
+    <!-- 404 Error Text -->
+    <div class="text-center full-height">
+        <div class="error mx-auto" data-text="404">404</div>
+        <p class="lead text-gray-800 mb-5">صفحه پیدا نشد!</p>
+        <p class="text-gray-500 mb-0">صفحه ای که دنبال آن بودید وجود ندارد!</p>
+        <a href="{% url 'dashboard:me_view' %}">
+            برگشت به داشبورد
+            &larr;
+        </a>
+    </div>
+{% endblock %}
+
+
+{% block none_sidebar %}
+
+{% endblock %}
+
+{% block non_topbar %}
+
+{% endblock %}

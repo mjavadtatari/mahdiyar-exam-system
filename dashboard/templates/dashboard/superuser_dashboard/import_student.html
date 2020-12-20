@@ -1,0 +1,63 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load humanize %}
+
+{% block page_title %}
+    افزودن گروهی دانش آموزان
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    افزودن گروهی دانش آموزان
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    {% if errors %}
+                        {% for e in errors %}
+                            <div class="alert alert-danger text-center" role="alert">
+                                کاربر
+                                {{ e.f_name }}
+                                {{ e.l_name }}
+                                افزوده نشد زیرا
+                                دانش آموزی با این کد ملی
+                                {{ e.pass_num }}
+                                موجود میباشد!
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% elif klass %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        بسته به تعداد دانش آموزان، زمان افزودن آنها به صورت گروهی ممکن است کمی طول بکشد، لذا از صبر و شکیبایی شما سپاس گذاریم.
+                    </div>
+                    <form action="" method="post" class="all-forms-style table-responsive"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="alert-secondary p-3 text-center" role="alert">
+                                <span class="d-block pt-2">
+                                    {% for j in klass %}
+                                        {% include 'dashboard/_form_group_layout.html' with field=j error=j.errors %}
+                                    {% endfor %}
+                                </span>
+                            <button type="submit" class="btn btn-outline-primary btn-block my-2">
+                                بررسی فایل و افزودن دانش آموزان
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

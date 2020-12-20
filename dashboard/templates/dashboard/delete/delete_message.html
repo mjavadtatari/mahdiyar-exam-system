@@ -1,0 +1,44 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    پیغام
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    پیغام
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:me_view' %}" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% else %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ temp_obj }}
+                                حذف شود؟
+                            </h5>
+                            <p class="card-text">برای حذف بر روی دکمه (حذف) کلیک کنید!</p>
+                            <a class="btn btn-danger" href="?status=True">حذف</a>
+                            <a href="{% url 'dashboard:me_view' %}" class="btn btn-secondary"
+                               type="button">انصراف</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

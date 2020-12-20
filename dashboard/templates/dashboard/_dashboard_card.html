@@ -1,0 +1,38 @@
+{% if is_profile_page %}
+    {% include 'dashboard/_show_profile.html' %}
+{% elif is_profile_edit_page %}
+    {% include 'dashboard/_profile_edit.html' %}
+{% elif home_page %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                آمار سامانه
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% include "dashboard/_dashboard_box.html" with box_color='primary' box_badge='دانش آموز' box_title=home_page_statics.all_students box_icon='fa-user-graduate' %}
+                {% include "dashboard/_dashboard_box.html" with box_color='success' box_badge='آزمون' box_title=home_page_statics.all_exams box_icon='fa-file-alt' %}
+            </div>
+            <div class="row">
+                {% include "dashboard/_dashboard_box.html" with box_color='warning' box_badge='آموزشگاه' box_title=home_page_statics.all_academies box_icon='fa-school' %}
+                {% include "dashboard/_dashboard_box.html" with box_color='danger' box_badge='آموزگار' box_title=home_page_statics.all_teachers box_icon='fa-book-reader' %}
+            </div>
+            <div class="row">
+                {% include "dashboard/_dashboard_box.html" with box_color='info' box_badge='سوال' box_title=home_page_statics.all_questions box_icon='fa-question-circle' %}
+                {% include "dashboard/_dashboard_box.html" with box_color='dark' box_badge='کاربر' box_title=home_page_statics.all_users box_icon='fa-laugh-beam' %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                {{ card_title }}
+            </h6>
+        </div>
+        <div class="card-body">
+            {{ card_content }}
+        </div>
+    </div>
+{% endif %}

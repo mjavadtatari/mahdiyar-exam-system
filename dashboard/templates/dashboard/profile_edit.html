@@ -1,0 +1,15 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    تغییر پروفایل
+    {{ profile.user.get_full_name }}
+{% endblock %}
+
+
+
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        {% include 'dashboard/_dashboard_card.html' with is_profile_edit_page=True %}
+    </div>
+{% endblock %}

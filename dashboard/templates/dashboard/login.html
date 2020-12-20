@@ -1,0 +1,118 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    ورود به سامانه
+{% endblock %}
+
+{% block extera_links %}
+    <link href="{% static "dashboard/vendor/fontawesome-free/css/all.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/main.css" %}">
+{% endblock %}
+
+{% block extera_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/sb-admin-2.css" %}">
+{% endblock %}
+
+{% block inner_body_tag %}
+    class="bg-gradient-primary
+{% endblock %}
+
+{% block container %}
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    {% if error %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            {{ error }}
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                    <div class="text-center py-5">
+                                        <h1 class="h4 text-gray-900 mb-4">خوش آمدید!</h1>
+                                    </div>
+                                    <form action="" method="post" class="user pb-5">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" name="username"
+                                                   value="{{ username }}" id="exampleInputEmail"
+                                                   aria-describedby="emailHelp" placeholder="نام کاربری" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                   name="password" id="exampleInputPassword" placeholder="رمز عبور"
+                                                   required>
+                                        </div>
+                                        {#                                        <div class="form-group">#}
+                                        {#                                            <div class="custom-control custom-checkbox small">#}
+                                        {#                                                <input type="checkbox" class="custom-control-input" id="customCheck">#}
+                                        {#                                                <label class="custom-control-label" for="customCheck">مرا به یاد داشته باش</label>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">ورود</button>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        {#                                        <a class="small" href="forgot-password.html">فراموشی رمز عبور</a>#}
+                                        {#                                        <br>#}
+                                        <a class="small" href="{% url 'dashboard:signup' %}">عضو سامانه نیستی؟ ثبت نام
+                                            کن</a>
+                                        <br>
+                                        <a class="small" href="{% url 'home_page' %}">صفحه اصلی</a>
+                                    </div>
+                                    {#                                    <div class="text-center">#}
+                                    {#                                        <a class="small" href="register.html">ثبت نام</a>#}
+                                    {#                                    </div>#}
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-lg-block bg-login-image overflow-auto" style="height: 35rem;">
+                                <div class="my-3 mx-2 p-2 text-justify text-light rounded my-transparent">
+                                    {% for message in notification %}
+                                        {% include 'dashboard/_error_alart.html' with notification_box=True message=message %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+{% endblock %}
+
+{% block extera_js %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static "dashboard/vendor/jquery/jquery.min.js" %}"></script>
+    <script src="{% static "dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static "dashboard/vendor/jquery-easing/jquery.easing.min.js" %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static "dashboard/js/sb-admin-2.min.js" %}"></script>
+
+
+{% endblock %}
+
+{% block js_files %}
+{% endblock %}
+{% block css_files %}
+{% endblock %}

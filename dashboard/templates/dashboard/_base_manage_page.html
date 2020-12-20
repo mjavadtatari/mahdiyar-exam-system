@@ -1,0 +1,62 @@
+<div class="col-lg-8 mb-4">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary d-inline">
+                مدیریت
+                {{ name }}
+                ها
+            </h6>
+            {% if all %}
+                <a href="{% url create %}" class="btn btn-success btn-sm float-left">
+                    ساخت
+                    {{ name }}
+                    جدید
+                </a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if message %}
+                <div class="alert alert-{{ message.color }} text-center" role="alert">
+                    {{ message.text }}
+                </div>
+                <a href="{% url back %}" type="submit"
+                   class="btn btn-light btn-lg btn-block mt-2">بازگشت</a>
+            {% elif single %}
+                {% include 'azmoon/_changer_form.html' with id=changer id_name=name back_url=back %}
+            {% elif all %}
+                {% for i in all %}
+                    <div class="alert alert-secondary text-center pb-3" role="alert">
+                        {% if slugg %}
+                            <a href="{% url change_link slug=i.slug %}" class="text-decoration-none text-dark">
+                        {% elif uuidd %}
+                            <a href="{% url change_link uuid=i.question_id %}" class="text-decoration-none text-dark">
+                        {% elif exam_uuid %}
+                            <a href="{% url change_link uuid=i.exam_id %}" class="text-decoration-none text-dark">
+                        {% endif %}
+
+                        {{ i }}
+                        </a>
+
+                        {% if slugg %}
+                            <a href="{% url change_link slug=i.slug %}"
+                               class="btn btn-outline-primary btn-sm float-left">
+                        {% elif uuidd %}
+                            <a href="{% url change_link uuid=i.question_id %}"
+                               class="btn btn-outline-primary btn-sm float-left">
+                        {% elif exam_uuid %}
+                            <a href="{% url change_link uuid=i.exam_id %}"
+                               class="btn btn-outline-primary btn-sm float-left">
+                        {% endif %}
+                        ویرایش یا حذف
+                        </a>
+                    </div>
+                {% endfor %}
+                {% include 'azmoon/_pagination_template.html' with function_return_name=all page_name='page' %}
+            {% else %}
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ all.error }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

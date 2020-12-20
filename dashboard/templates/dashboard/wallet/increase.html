@@ -1,0 +1,75 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load humanize %}
+
+{% block page_title %}
+    افزایش اعتبار
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    افزایش اعتبار
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    {% if profile.user.is_superuser %}
+                        <a href="{% url 'dashboard:list_supervisor' %}" type="submit"
+                           class="btn btn-light btn-block mt-2">
+                            لیست سرپرست ها
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'dashboard:list_teacher' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        لیست آموزگار ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% elif temp_wallet %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="alert-secondary p-3 text-center" role="alert">
+                            {% if profile.user.is_supervisor %}
+                                <div class="row">
+                                    <div class="col mb-2">
+                                        اعتبار شما:
+                                        {{ self_wallet.get_balance|intcomma }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-sm my-lg-0 my-2 pt-1">
+                                <span class="d-block pt-2">
+                                    {{ temp_wallet }}
+                                </span>
+                                </div>
+                                <div class="col-sm my-lg-0 my-2">
+                                    <div class="form-group my-2">
+                                        <span class="badge badge-dark">{{ temp_amount.amount.help_text }}</span>
+                                        {% for i in temp_amount.amount.error %}
+                                            <span class="badge badge-danger">{{ i }}</span>
+                                        {% endfor %}
+                                        {{ temp_amount.amount }}
+                                    </div>
+                                </div>
+                                <div class="col-sm my-lg-0 my-2">
+                                    <button type="submit" class="btn btn-outline-primary btn-block my-2">افزایش اعتبار
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

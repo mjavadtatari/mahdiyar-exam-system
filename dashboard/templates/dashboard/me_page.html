@@ -1,0 +1,24 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    داشبورد
+    {{ profile.user.get_full_name }}
+{% endblock %}
+
+{% block dashboard_name %}
+    <small>کاربر گرامی</small>
+    <span class="badge badge-pill badge-warning text-dark">
+    {{ profile.user.get_full_name }}
+    </span>
+    <small>خوش آمدید!</small>
+{% endblock %}
+
+
+
+{% block first_card_place %}
+    {% include 'dashboard/_dashboard_card.html' with is_profile_page=True %}
+{% endblock %}
+
+{% block second_card_place %}
+    {% include 'dashboard/_dashboard_card_second.html' with card_title='اخبار و اطلاعیه ها' %}
+{% endblock %}

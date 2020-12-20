@@ -1,0 +1,59 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    مدیریت
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    لیست
+                    {{ page_name }}
+                    ها
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if g_i_a_v.dashboard.student %}
+                    {% for i in g_i_a_v.dashboard.student %}
+                        <div class="alert alert-secondary text-center pb-3" role="alert">
+                            <a class="text-decoration-none text-dark">
+                                {{ i.user.get_full_name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    {% if all_student.text %}
+                        <div class="alert alert-danger text-center" role="alert">
+                            موردی یافت نشد!
+                        </div>
+                        <a href="{% url 'dashboard:student_manage' %}" type="submit"
+                           class="btn btn-light btn-block mt-2">بازگشت به مدیریت دانش آموزان</a>
+                        <a href="{% url 'dashboard:me_view' %}" type="submit"
+                           class="btn btn-light btn-block mt-2">بازگشت</a>
+                    {% elif all_student %}
+                        {% for i in all_student %}
+                            <div class="alert alert-success text-center pb-3" role="alert">
+                                <a href="?student={{ i.pk }}" class="text-decoration-none text-dark">
+                                    {{ i }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                        {% include 'dashboard/_pagination_template.html' with function_return_name=all_student page_name='page' %}
+                    {% else %}
+                        <div class="alert alert-danger text-center" role="alert">
+                            {{ all_student.error }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    ساخت
+    {{ nam_e }}
+    جدید
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    ساخت
+                    {{ nam_e }}
+                    جدید
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if messag_e %}
+                    <div class="alert alert-{{ messag_e.color }} text-center" role="alert">
+                        {{ messag_e.text }}
+                    </div>
+                    <a href="{% url back_url %}" type="submit"
+                       class="btn btn-light btn-lg btn-block mt-2">بازگشت</a>
+                {% elif make_r %}
+                    {% include 'dashboard/_maker_form.html' with id=make_r na_me=nam_e bac_k_url=back_url %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ make_r.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

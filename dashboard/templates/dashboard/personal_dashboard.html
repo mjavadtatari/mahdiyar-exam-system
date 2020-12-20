@@ -1,0 +1,11 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    صفحه شخصی
+    {{ personal_page.user.get_full_name }}
+{% endblock %}
+
+{% block dashboard_name %}
+    <small>صفحه شخصی </small>
+    {{ personal_page.user.get_full_name }}
+{% endblock %}

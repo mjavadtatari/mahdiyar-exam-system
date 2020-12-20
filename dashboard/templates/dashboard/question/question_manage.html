@@ -1,0 +1,74 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    مدیریت
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    مدیریت
+                    {{ page_name }}
+                    ها
+                </h6>
+                <a href="{% url 'dashboard:question_create' %}" class="btn btn-success btn-sm float-left">
+                    ساخت
+                    {{ page_name }}
+                    جدید
+                </a>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:question_manage' %}" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% elif all_question %}
+                    {% for i in all_question %}
+                        <div class="alert alert-secondary text-center pb-3" role="alert">
+                            <div class="row">
+                                <div class="col-sm my-lg-0 my-2">
+                                    <span class="text-decoration-none text-dark d-block">
+                                {{ i }}
+                            </span>
+                                </div>
+                                <div class="col-sm-2 my-lg-0 my-2">
+                                    <a href="{% url 'dashboard:question_change' qes_id=i.pk %}"
+                                       class="btn btn-outline-primary btn-sm btn-block">
+                                        ویرایش سوال
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 my-lg-0 my-2">
+                                    <a href="{% url 'dashboard:delete_uuid' name='question' obj_uuid=i.pk %}"
+                                       class="btn btn-outline-danger btn-sm btn-block">
+                                        حذف
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_question page_name='page' %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ all_objects.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

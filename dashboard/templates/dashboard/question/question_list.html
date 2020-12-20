@@ -1,0 +1,86 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    لیست آزمون های شما
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    آزمون های فعال
+                </h6>
+            </div>
+            <div class="card-body text-center">
+                {% if a_p_exams %}
+                    {% for item in a_p_exams %}
+                        <div class="alert alert-info" role="alert">
+                            آزمون:
+                            {{ item }}
+                            <span class="badge badge-pill badge-light text-dark p-2 mr-3">
+                            سوالات:
+                        {{ item.exam_question.count }}
+                        </span>
+                            <span class="badge badge-pill badge-warning text-dark p-2 mr-3">
+                            زمان پایان:
+                        {{ item.exam_end_time|to_jalali:'%Y/%m/%d, %H:%M' }}
+                        </span>
+                            <a class="btn btn-outline-danger mr-3" href="{% url 'azmoon:exam' exam_id=item.pk %}">
+                                ورود به آزمون
+                            </a>
+                        </div>
+                    {% endfor %}
+
+                    {% include 'azmoon/_pagination_template.html' with function_return_name=a_p_exams page_name='apexams' %}
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ profile_detail.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    آزمون های گذشته
+                </h6>
+            </div>
+            <div class="card-body text-center">
+                {% if d_p_exams %}
+                    {% for item in d_p_exams %}
+                        <div class="alert alert-secondary" role="alert">
+                            آزمون:
+                            {{ item }}
+                            <span class="badge badge-pill badge-light text-dark p-2 mr-3">
+                            سوالات:
+                        {{ item.exam_question.count }}
+                        </span>
+                            <span class="badge badge-pill badge-light text-dark p-2 mr-3">
+                            زمان پایان:
+                        {{ item.exam_end_time|to_jalali:'%Y/%m/%d, %H:%M' }}
+                        </span>
+                            <a class="btn btn-outline-success mr-3" href="{% url 'azmoon:exam' exam_id=item.pk %}">
+                                مشاهده نتیجه
+                            </a>
+                        </div>
+                    {% endfor %}
+
+                    {% include 'azmoon/_pagination_template.html' with function_return_name=d_p_exams page_name='dpexams' %}
+
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ profile_detail.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

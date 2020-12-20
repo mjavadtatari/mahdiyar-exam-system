@@ -1,0 +1,28 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    اجازه دسترسی ندارید!
+    | 403
+{% endblock %}
+
+{% block dashboard_content %}
+    <!-- 403 Error Text -->
+    <div class="text-center full-height">
+        <div class="error mx-auto" data-text="403">403</div>
+        <p class="lead text-gray-800 mb-5">اجازه دسترسی ندارید!</p>
+        <p class="text-gray-500 mb-0">شما اجازه مشاهده و دسترسی به صفحه ای که دنبال آن بودید را ندارید!</p>
+        <a href="{% url 'dashboard:me_view' %}">
+            برگشت به داشبورد
+            &larr;
+        </a>
+    </div>
+{% endblock %}
+
+
+{% block none_sidebar %}
+
+{% endblock %}
+
+{% block non_topbar %}
+
+{% endblock %}

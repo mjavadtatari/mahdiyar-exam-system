@@ -1,0 +1,147 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    {{ exam.exam_name }}
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="float-right my-3 mx-0 font-weight-bold text-primary d-inline">
+                    آزمون:
+                    {{ exam.exam_name }}
+                </h6>
+                <div class="float-left text-left">
+                    <a href="{% url 'dashboard:exam_end' exa_id=exam.pk %}" type="button"
+                       class="btn btn-danger pt-2 px-3 mb-2 ml-lg-2" style="height: 45px;">خاتمه آزمون</a>
+                    <span class="btn btn-warning text-dark btn-icon-split mb-2" style="height: 45px">
+                        <p id="timer" class="text pt-2" style="width: 200px;"></p>
+                            <span class="icon text-white-50">
+                          <i class="fas fa-clock mt-2"></i>
+                        </span>
+                        </span>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if success_alert %}
+                    <div id="success-alert" class="alert alert-success text-center" role="alert">
+                        پاسخ با موفقیت ذخیره شد!
+                    </div>
+                {% endif %}
+                <div class="alert alert-warning text-center">
+                    {{ has_answered }}
+                </div>
+                <div class="card">
+                    {% for q in question %}
+                        {% if q.question_picture %}
+                            <div class="easyzoom easyzoom--overlay easyzoom--with-toggle">
+                                <img src="{{ q.question_picture.url }}"
+                                     class="mysto-question-image card-img-top img-fluid">
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                سوال
+                                شماره
+                                {{ forloop.counter0|add:question.start_index }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            صورت سوال:
+                            {{ q.question_label }}
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="question" value="{{ q.pk }}">
+                            <div class="btn-group-vertical btn-block">
+                                {% for choice in question_choices %}
+                                    {% for i in choice.show_question_choices %}
+                                        <label for="id_answer_option_{{ forloop.counter0 }}"
+                                               class="custom-control custom-radio btn btn-light mb-2">
+                                            <input type="radio" id="id_answer_option_{{ forloop.counter0 }}"
+                                                   name="answer_option"
+                                                   value="{{ i.item.pk }}"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label"
+                                                   for="id_answer_option_{{ forloop.counter0 }}">{{ i.label }}</label>
+                                        </label>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="btn btn-success btn-lg btn-block">ذخیره پاسخ</button>
+                        </form>
+                        </div>
+                    {% endfor %}
+
+                <div class="my-2">
+                    <nav aria-label="Page navigation">
+                        {% if question.has_other_pages %}
+                            <ul class="pagination justify-content-center">
+                                {% if question.has_next %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?question={{ question.next_page_number }}">بعدی</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">بعدی</a></li>
+                                {% endif %}
+
+                                {% for i in question.paginator.page_range reversed %}
+                                    {% if question.number == i %}
+                                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?question={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+
+                                {% if question.has_previous %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?question={{ question.previous_page_number }}"
+                                                             tabindex="-1">قبلی</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">قبلی</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var count = {{remaining_time}};
+        var interval = setInterval(function () {
+            {#document.getElementById('timer').innerHTML = count;#}
+            count--;
+            var hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
+            var minutes = Math.floor((count % (60 * 60)) / (60));
+            var seconds = Math.floor((count % (60)));
+
+            document.getElementById("timer").innerHTML = hours + " ساعت "
+                + minutes + " دقیقه " + seconds + " ثانیه ";
+
+
+            if (count <= 0) {
+                clearInterval(interval);
+                document.getElementById('timer').innerHTML = 'پایان';
+                window.location.reload(false);
+            }
+        }, 1000);
+    </script>
+    <script>
+        window.setTimeout(function () {
+            $("#success-alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 2000);
+    </script>
+{% endblock %}

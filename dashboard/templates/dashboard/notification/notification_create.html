@@ -1,0 +1,61 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    افزودن
+    {{ page_name }}
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    افزودن
+                    {{ page_name }}
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }}" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:notification_manage' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% else %}
+                    <form action="" method="post" class="all-forms-style table-responsive" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% for j in form %}
+                            {% include 'dashboard/_form_group_layout.html' with field=j error=j.errors %}
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-success btn-block">
+                            ایجاد
+                            {{ page_name }}
+                            جدید
+                        </button>
+                    </form>
+                    <a href="{% url 'dashboard:notification_manage' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

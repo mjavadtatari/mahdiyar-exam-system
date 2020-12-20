@@ -1,0 +1,13 @@
+<form action="" method="post" class="all-forms-style table-responsive">
+    {% csrf_token %}
+
+    {% for j in id %}
+        {% include 'dashboard/_form_group_layout.html' with field=j error=j.errors %}
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success btn-block mb-2">
+        ساخت
+        {{ na_me }}
+    </button>
+</form>
+<a href="{% url bac_k_url %}" type="submit" class="btn btn-light btn-block">بازگشت</a>

@@ -1,0 +1,80 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    {{ exam.exam_name }}
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    آزمون:
+                    {{ exam.exam_name }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-dark text-center" role="alert">
+                    زمان باقی مانده برای شما:
+                    <span class="btn btn-warning text-dark btn-icon-split mb-2 mt-lg-0 mt-3" style="height: 45px">
+                        <p id="timer" class="text pt-2" style="width: 200px;"></p>
+                            <span class="icon text-white-50">
+                          <i class="fas fa-clock mt-2"></i>
+                        </span>
+                        </span>
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'dashboard:exam_examing' exa_id=exam.pk %}"
+                       class="btn btn-info btn-icon-split mb-2 btn-block">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                        <span class="text">
+                        بازگشت به آزمون
+                    </span>
+                    </a>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="endit" value="True">
+                        <button type="submit" class="btn btn-danger btn-block btn-icon-split mb-2">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-times"></i>
+                    </span>
+                            <span class="text">
+                        خاتمه آزمون
+                    </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="alert alert-warning mt-2" role="alert">
+                    در صورت انتخاب گزینه (خاتمه آزمون) راه بازگشتی وجود نخواهد داشت!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var count = {{remaining_time}};
+        var interval = setInterval(function () {
+            {#document.getElementById('timer').innerHTML = count;#}
+            count--;
+            var hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
+            var minutes = Math.floor((count % (60 * 60)) / (60));
+            var seconds = Math.floor((count % (60)));
+
+            document.getElementById("timer").innerHTML = hours + " ساعت "
+                + minutes + " دقیقه " + seconds + " ثانیه ";
+
+            if (count <= 0) {
+                clearInterval(interval);
+                document.getElementById('timer').innerHTML = 'پایان';
+                window.location.reload(false);
+            }
+        }, 1000);
+    </script>
+{% endblock %}

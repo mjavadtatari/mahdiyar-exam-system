@@ -1,0 +1,73 @@
+{% load jalali_tags %}
+{% if edit_password %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ field.old_password.errors }}
+        {{ field.new_password1.errors }}
+        {{ field.new_password2.errors }}
+        <button type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% elif signup_page %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ field.email.errors }}
+        {{ field.username.errors }}
+        {{ field.password1.errors }}
+        {{ field.password2.errors }}
+        <button type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% elif profile_edit_user %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ field.email.errors }}
+        {{ field.first_name.errors }}
+        {{ field.last_name.errors }}
+        <button type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% elif message_box %}
+    <div class="text-justify">
+        <div class="alert alert-{{ message_color }}" role="alert">
+            <h4 class="alert-heading">{{ message_header }}</h4>
+            {% if message_img %}
+                <img src="{{ message_img.url }}" class="img-fluid" alt="{{ message_header }}">
+            {% endif %}
+            {{ message_img }}
+            <p class="font-weight-light">{{ message_content|linebreaks }}</p>
+            <hr>
+            <small class="mb-0">{{ message_footer }}</small>
+        </div>
+    </div>
+{% elif notification_box %}
+    <div class="text-justify">
+        <div class="alert alert-{{ message.color }}" role="alert">
+            <h4 class="alert-heading">{{ message.notification_title }}</h4>
+            {% if message.notification_image %}
+                <img src="{{ message.notification_image.url }}" class="img-fluid" alt="{{ message.notification_title }}">
+            {% endif %}
+            <p class="font-weight-light">{{ message.notification_text|linebreaks }}</p>
+            <hr>
+            <small class="mb-0">{{ message.date|to_jalali:'%Y/%m/%d, %H:%M' }}</small>
+        </div>
+    </div>
+{% else %}
+    <tr class="table-borderless">
+        <td colspan="2">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ field.errors }}
+                <button type="button" class="close" data-dismiss="alert"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </td>
+    </tr>
+{% endif %}
+
+
+

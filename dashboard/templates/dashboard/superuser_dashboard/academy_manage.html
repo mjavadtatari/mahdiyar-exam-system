@@ -1,0 +1,120 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    مدیریت
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-sm">
+                        <h6 class="my-2 font-weight-bold text-primary d-inline-block">
+                            لیست
+                            {{ page_name }}
+                            ها
+                        </h6>
+                        <a href="{% url 'dashboard:academy_create' %}" class="badge badge-pill badge-success">
+                            ساخت
+                            {{ page_name }}
+                            جدید
+                        </a>
+                        <a href="{% url 'dashboard:list_all' name='academy' %}" class="badge badge-pill badge-info">
+                            لیست کامل
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <form method="post" action="" class="form-inline my-2 my-lg-0 float-lg-left">
+                            {% csrf_token %}
+                            <input class="form-control ml-sm-2 btn-sm" type="search"
+                                   placeholder="نام آموزشگاه را وارد کنید"
+                                   aria-label="Search" name="search_content">
+                            <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">
+                                جستجو
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:academy_manage' %}" type="submit"
+                       class="btn btn-light btn-block mt-2">بازگشت مدیریت
+                        {{ page_name }}
+                        ها</a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit"
+                       class="btn btn-light btn-block mt-2">بازگشت به پنل</a>
+                {% elif form %}
+                    <form action="" method="post" class="all-forms-style table-responsive">
+                        {% csrf_token %}
+
+                        {% for j in form %}
+                            {% include 'dashboard/_form_group_layout.html' with field=j error=j.errors %}
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-success btn-block">
+                            ویرایش
+                            {{ page_name }}
+                        </button>
+                    </form>
+                    <a href="{% url 'dashboard:academy_manage' %}"
+                       class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+
+                {% elif all_object %}
+                    {% for i in all_object %}
+                        <div class="alert alert-secondary text-center pb-3" role="alert">
+                            <div class="row">
+                                <div class="col-sm my-lg-0 my-2">
+                                    <span class="text-decoration-none text-dark d-block">
+                                {{ i }}
+                            </span>
+                                </div>
+                                <div class="col-sm-2 my-lg-0 my-2">
+                                    <a href="{% url 'dashboard:academy_change' aca_id=i.pk %}"
+                                       class="btn btn-outline-primary btn-sm btn-block">
+                                        ویرایش
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 my-lg-0 my-2">
+                                    <a href="{% url 'dashboard:delete_none_uuid' name='academy' obj_id=i.pk %}"
+                                       class="btn btn-outline-danger btn-sm btn-block">
+                                        حذف
+                                    </a>
+                                </div>
+                                <div class="col-sm-3 my-lg-0 my-2">
+                                    <a href="{% url 'dashboard:academy_view' aca_id=i.pk %}"
+                                       class="btn btn-outline-dark btn-sm btn-block">
+                                        مشاهده صفحه
+                                        {{ page_name }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_object page_name='page' long='True' long_list=page_range %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ all_object.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

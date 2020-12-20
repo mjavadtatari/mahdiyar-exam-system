@@ -1,0 +1,22 @@
+{% if field.name == 'exam_question' %}
+    <div class="form-group">
+        <label for="id_{{ field.name }}">{{ field.label }}</label>
+        <span class="badge badge-dark">{{ field.help_text }}</span>
+        {% for i in error %}
+            <span class="badge badge-danger">{{ i }}</span>
+        {% endfor %}
+
+        <div class="exam-question-selector">
+            {{ field }}
+        </div>
+    </div>
+{% else %}
+    <div class="form-group">
+        <label for="id_{{ field.name }}">{{ field.label }}</label>
+        <span class="badge badge-dark">{{ field.help_text }}</span>
+        {% for i in error %}
+            <span class="badge badge-danger">{{ i }}</span>
+        {% endfor %}
+        {{ field }}
+    </div>
+{% endif %}

@@ -1,0 +1,43 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    مدیریت آزمون ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    مدیریت آزمون ها
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for i in g_i_a_v.dashboard.exam %}
+                    {% if i.is_active %}
+                        <div class="alert alert-success text-center pb-3" role="alert">
+                            <a href="{% url 'azmoon:take_exam' exam_id=i.pk %}"
+                               class="text-decoration-none text-dark">
+                                آزمون
+                                {{ i }}
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-secondary text-center pb-3" role="alert">
+                            <a href="#"
+                               class="text-decoration-none text-dark">
+                                آزمون
+                                {{ i }}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% if long %}
+    <nav aria-label="Page navigation">
+        {% if function_return_name.has_other_pages %}
+            <ul class="pagination justify-content-center">
+                {% if function_return_name.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?{{ page_name }}={{ function_return_name.next_page_number }}">بعدی</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">بعدی</a></li>
+                {% endif %}
+
+                {% for i in long_list reversed %}
+                    {% if function_return_name.number == i %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?{{ page_name }}={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+
+                {% if function_return_name.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?{{ page_name }}={{ function_return_name.previous_page_number }}"
+                                             tabindex="-1">قبلی</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">قبلی</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </nav>
+{% else %}
+    <nav aria-label="Page navigation">
+        {% if function_return_name.has_other_pages %}
+            <ul class="pagination justify-content-center">
+                {% if function_return_name.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?{{ page_name }}={{ function_return_name.next_page_number }}">بعدی</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">بعدی</a></li>
+                {% endif %}
+
+                {% for i in function_return_name.paginator.page_range reversed %}
+                    {% if function_return_name.number == i %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?{{ page_name }}={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+
+                {% if function_return_name.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?{{ page_name }}={{ function_return_name.previous_page_number }}"
+                                             tabindex="-1">قبلی</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">قبلی</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </nav>
+{% endif %}

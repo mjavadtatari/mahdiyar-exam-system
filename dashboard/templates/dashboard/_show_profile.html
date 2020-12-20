@@ -1,0 +1,94 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            مشخصات شما
+        </h6>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <tbody>
+            <tr class="table-borderless">
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-id-badge ml-2 d-n"></i>
+                    نام کاربری :
+                </th>
+                <td>{{ profile.user.username }}</td>
+            </tr>
+            <tr>
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-envelope ml-2"></i>
+                    آدرس ایمیل :
+                </th>
+                <td>{{ profile.user.email }}</td>
+            </tr>
+            <tr>
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-user ml-2"></i>
+                    نام و نام خانوادگی :
+                </th>
+                <td>{{ profile.user.get_full_name }}</td>
+            </tr>
+            <tr>
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-id-card ml-2"></i>
+                    کد ملی :
+                </th>
+                <td>{{ profile.passport_number }}</td>
+            </tr>
+            <tr>
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-medal ml-2"></i>
+                    سطح کاربری :
+                </th>
+                <td>{{ user_type }}</td>
+            </tr>
+            <tr>
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-birthday-cake ml-2"></i>
+                    تاریخ تولد :
+                </th>
+                <td>{{ jalali }}</td>
+            </tr>
+            <tr>
+                <th class="d-sm-block d-none" scope="row">
+                    <i class="fas fa-mobile ml-2"></i>
+                    تلفن همراه :
+                </th>
+                <td>{{ profile.phone_number }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row text-center">
+            <div class="col-sm mx-1 px-0">
+                <a href="{% url 'dashboard:sign_up_key' %}" class="btn btn-danger btn-icon-split mb-2 btn-block">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-key"></i>
+                    </span>
+                    <span class="text">
+                        ورود کلید ثبت نام
+                    </span>
+                </a>
+            </div>
+            <div class="col-sm mx-1 px-0">
+                <a href="{% url 'dashboard:profile_edit' %}" class="btn btn-info btn-icon-split mb-2 btn-block">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-user-cog"></i>
+                    </span>
+                    <span class="text">
+                        ویرایش مشخصات
+                    </span>
+                </a>
+            </div>
+            <div class="col-sm mx-1 px-0">
+                <a href="{% url 'dashboard:password_edit' %}" class="btn btn-success btn-icon-split mb-2 btn-block">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-key"></i>
+                    </span>
+                <span class="text">
+                        تغییر رمز عبور
+                    </span>
+            </a>
+            </div>
+        </div>
+    </div>
+</div>

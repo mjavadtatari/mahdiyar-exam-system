@@ -1,0 +1,85 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    مدیریت
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    مدیریت
+                    {{ page_name }}
+                    ها
+                </h6>
+                <a href="#" class="btn btn-success btn-sm float-left">
+                    ساخت
+                    {{ page_name }}
+                    جدید
+                </a>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:superuser_student_manage' %}" type="submit"
+                       class="btn btn-light btn-block mt-2">
+                        بازگشت مدیریت
+                        {{ page_name }}
+                        ها</a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit"
+                       class="btn btn-light btn-block mt-2">بازگشت به پنل</a>
+                {% elif form %}
+                    <form action="" method="post" class="all-forms-style table-responsive">
+                        {% csrf_token %}
+
+                        {% for j in form %}
+                            {% include 'azmoon/_form_group_layout.html' with field=j error=j.errors %}
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-success btn-block">
+                            ویرایش
+                            {{ page_name }}
+                        </button>
+                    </form>
+                    <a href="{% url 'dashboard:superuser_student_manage' %}"
+                       class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+
+                {% elif all_object %}
+                    {% for i in all_object %}
+                        <div class="alert alert-secondary text-center pb-3" role="alert">
+                            <a href="{% url 'dashboard:superuser_student_manage' stu_id=i.pk %}"
+                               class="text-decoration-none text-dark">
+                                {{ i }}
+                            </a>
+                            <a href="{% url 'dashboard:superuser_student_manage' stu_id=i.pk %}"
+                               class="btn btn-outline-primary btn-sm float-left">
+                                ویرایش
+                            </a>
+                        </div>
+                    {% endfor %}
+                    {% include 'azmoon/_pagination_template.html' with function_return_name=all_object page_name='page' %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ all_object.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

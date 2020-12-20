@@ -1,0 +1,142 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load static %}
+
+{% block page_title %}
+    لیست کامل
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-sm">
+                        <h6 class="my-2 font-weight-bold text-primary d-block">
+                            لیست کامل
+                            {{ page_name }}
+                            ها
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:list_student' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست کامل
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% elif all_obj %}
+                    <div class="table-responsive">
+                        <table id="crypto-transaction" class="table table-hover table-xl trans-wrapper">
+                            <thead>
+                            <tr>
+                                {% if name == 'klass' %}
+                                    <th class="border-top-0">نام</th>
+                                    <th class="border-top-0">آموزشگاه</th>
+                                    <th class="border-top-0">آموزگار (ها)</th>
+                                    <th class="border-top-0">دکمه ها</th>
+                                {% elif name == 'academy' %}
+                                    <th class="border-top-0">نام</th>
+                                    <th class="border-top-0">تلفن</th>
+                                    <th class="border-top-0">دکمه ها</th>
+                                {% else %}
+                                    <th class="border-top-0">نام و نام خانوادگی</th>
+                                    <th class="border-top-0">کد ملی</th>
+                                    <th class="border-top-0">کلاس</th>
+                                    <th class="border-top-0">آموزشگاه</th>
+                                    <th class="border-top-0">دکمه ها</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in all_obj %}
+                                <tr>
+                                    {% if name == 'klass' %}
+                                        <td>
+                                            <div class="Trans-id">{{ i.name }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="time">{{ i.academy.name }}</div>
+                                        </td>
+                                        <td>
+                                            {% for j in i.teacher.all %}
+                                                <div class="amount">
+                                                    {{ j }}
+                                                </div>
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'dashboard:klass_view' kls_id=i.pk %}"
+                                               class="badge badge-pill badge-info">مشاهده</a>
+                                            <a href="{% url 'dashboard:delete_none_uuid' name='klass' obj_id=i.pk %}"
+                                               class="badge badge-pill badge-danger">حذف</a>
+                                        </td>
+                                    {% elif name == 'academy' %}
+                                        <td>
+                                            <div class="Trans-id">{{ i.name }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="Trans-id">{{ i.phone }}</div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'dashboard:academy_view' aca_id=i.pk %}"
+                                               class="badge badge-pill badge-info">مشاهده</a>
+                                            <a href="{% url 'dashboard:delete_none_uuid' name='academy' obj_id=i.pk %}"
+                                               class="badge badge-pill badge-danger">حذف</a>
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            <div class="Trans-id">{{ i.user.get_full_name }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="time">{{ i.passport_number }}</div>
+                                        </td>
+                                        <td>
+                                            {% if name == 'supervisor' %}
+                                                ------
+                                            {% else %}
+                                                {% for j in i.klass.all %}
+                                                    <div class="amount">
+                                                        {{ j.name }}
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="time">{{ i.academy.name }}</div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'dashboard:changepass_user' name='user' user_id=i.user.pk %}"
+                                               class="badge badge-pill badge-info">تغییر رمز</a>
+                                            <a href="{% url 'dashboard:delete_none_uuid' name='user' obj_id=i.user.pk %}"
+                                               class="badge badge-pill badge-danger">حذف</a>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_obj page_name='page' long='True' long_list=page_range %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ all_student.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

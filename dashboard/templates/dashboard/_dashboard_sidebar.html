@@ -1,0 +1,438 @@
+{% load static %}
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <div class="mb-3">
+        <a class="sidebar-brand align-items-center justify-content-center" href="/">
+            <div class="sidebar-brand-icon">
+                <img src="{% static 'dashboard/img/mahdiyarlogo.png' %}" height="60px">
+            </div>
+            <div class="sidebar-brand-text mx-3">
+                سامانه آزمون
+                مهدی یار
+            </div>
+        </a>
+    </div>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    {% if g_i_a_v %}
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'dashboard:login' %}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>داشبورد شما</span></a>
+        </li>
+        <div id="large-displays">
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                اطلاعات تحصیلی
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+                   aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-school"></i>
+                    <span>آموزشگاه</span>
+                </a>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {% if g_i_a_v.profile.user.is_superuser %}
+                            <a class="collapse-item" href="{% url 'dashboard:academy_create' %}">افزودن آموزشگاه</a>
+                            <a class="collapse-item" href="{% url 'dashboard:academy_manage' %}">مدیریت آموزشگاه ها</a>
+                        {% else %}
+                            <a class="collapse-item"
+                               href="{% url 'dashboard:academy_view' aca_id=g_i_a_v.dashboard.academy.pk %}">{{ g_i_a_v.dashboard.academy }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                   aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-user-graduate"></i>
+                    <span>کلاس</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingUtilities"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {% if g_i_a_v.profile.user.is_superuser %}
+                            <a class="collapse-item" href="{% url 'dashboard:klass_create' %}">افزودن کلاس</a>
+                            <a class="collapse-item" href="{% url 'dashboard:klass_manage' %}">مدیریت کلاس ها</a>
+                        {% elif g_i_a_v.profile.user.is_student %}
+                            <a class="collapse-item"
+                               href="{% url 'dashboard:klass_view' kls_id=g_i_a_v.dashboard.klass.pk %}">{{ g_i_a_v.dashboard.klass }}</a>
+                        {% else %}
+                            {% for i in g_i_a_v.dashboard.klass %}
+                                <a class="collapse-item" href="{% url 'dashboard:klass_view' kls_id=i.pk %}">{{ i }}</a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% if g_i_a_v.profile.user.is_superuser or g_i_a_v.profile.user.is_supervisior %}
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoo"
+                       aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-fw fa-comment-alt"></i>
+                        <span>اطلاعیه</span>
+                    </a>
+                    <div id="collapseTwoo" class="collapse" aria-labelledby="headingUtilities"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'dashboard:notification_create' %}">افزودن اطلاعیه</a>
+                            <a class="collapse-item" href="{% url 'dashboard:notification_manage' %}">مدیریت اطلاعیه
+                                ها</a>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+            {% endif %}
+
+            {% if g_i_a_v.profile.user.is_superuser %}
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThreee"
+                       aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-fw fa-folder-open"></i>
+                        <span>دسته بندی</span>
+                    </a>
+                    <div id="collapseThreee" class="collapse" aria-labelledby="headingUtilities"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'dashboard:category_create' %}">افزودن دسته بندی</a>
+                            <a class="collapse-item" href="{% url 'dashboard:category_manage' %}">مدیریت دسته بندی
+                                ها</a>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+            {% endif %}
+
+            {% if g_i_a_v.profile.user.is_superuser %}
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>مدیریت کاربران</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'dashboard:list_supervisor' %}">سرپرست ها</a>
+                            <a class="collapse-item" href="{% url 'dashboard:list_teacher' %}">آموزگار ها</a>
+                            <a class="collapse-item" href="{% url 'dashboard:list_student' %}">دانش آموز ها</a>
+                            <a class="collapse-item" href="{% url 'dashboard:import_choose' %}">افزودن گروهی دانش
+                                آموزان</a>
+                        </div>
+                    </div>
+                </li>
+            {% elif g_i_a_v.profile.user.is_supervisor %}
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>مدیریت کاربران</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'dashboard:list_teacher' %}">آموزگار ها</a>
+                            <a class="collapse-item" href="{% url 'dashboard:list_student' %}">دانش آموز ها</a>
+                            <a class="collapse-item" href="{% url 'dashboard:import_choose' %}">افزودن گروهی دانش
+                                آموزان</a>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+            {% endif %}
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                اطلاعات آزمون
+            </div>
+
+            {% if g_i_a_v.profile.user.is_student %}
+            {% elif g_i_a_v.profile.user.is_supervisor %}
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSeven"
+                       aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>سوال</span>
+                    </a>
+                    <div id="collapseSeven" class="collapse" aria-labelledby="headingPages"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'dashboard:question_list' %}">لیست سوال ها</a>
+                        </div>
+                    </div>
+                </li>
+            {% else %}
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSeven"
+                       aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>سوال</span>
+                    </a>
+                    <div id="collapseSeven" class="collapse" aria-labelledby="headingPages"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{% url 'dashboard:question_create' %}">افزودن سوال</a>
+                            <a class="collapse-item" href="{% url 'dashboard:question_manage' %}">مدیریت سوال ها</a>
+                        </div>
+                    </div>
+                </li>
+            {% endif %}
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-file-alt"></i>
+                    <span>آزمون</span>
+                </a>
+                <div id="collapseSix" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {% if g_i_a_v.profile.user.is_supervisor %}
+                            <a class="collapse-item" href="{% url 'dashboard:exam_list' %}">لیست آزمون ها</a>
+                        {% elif g_i_a_v.profile.user.is_student %}
+                            <a class="collapse-item" href="{% url 'dashboard:exam_list' %}">لیست آزمون ها</a>
+                        {% else %}
+                            <a class="collapse-item" href="{% url 'dashboard:exam_create' %}">افزودن آزمون</a>
+                            <a class="collapse-item" href="{% url 'dashboard:exam_manage' %}">مدیریت آزمون ها</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                {% if g_i_a_v.profile.user.is_student %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_score' %}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>مشاهده نمرات</span></a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_score' %}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>مشاهده نمرات دانش آموزان</span></a>
+                {% endif %}
+            </li>
+        </div>
+
+        <div id="small-displays">
+            <!-- Divider -->
+            <hr class="mysto-sidebar-divider">
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                {% if g_i_a_v.profile.user.is_superuser %}
+                    <a class="nav-link" href="{% url 'dashboard:academy_create' %}"><i
+                            class="fas fa-fw fa-school"></i><span>افزودن آموزشگاه</span></a>
+                    <a class="nav-link" href="{% url 'dashboard:academy_manage' %}"><i
+                            class="fas fa-fw fa-school"></i><span>مدیریت آموزشگاه ها</span></a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'dashboard:academy_view' aca_id=g_i_a_v.dashboard.academy.pk %}"><i
+                            class="fas fa-fw fa-school"></i><span>{{ g_i_a_v.dashboard.academy }}</span></a>
+                {% endif %}
+            </li>
+
+            <hr class="mysto-sidebar-divider">
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                {% if g_i_a_v.profile.user.is_superuser %}
+                    <a class="nav-link" href="{% url 'dashboard:klass_create' %}">
+                        <i class="fas fa-fw fa-user-graduate"></i>
+                        <span>افزودن کلاس</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:klass_manage' %}">
+                        <i class="fas fa-fw fa-user-graduate"></i>
+                        <span>مدیریت کلاس ها</span>
+                    </a>
+                {% elif g_i_a_v.profile.user.is_student %}
+                    <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=g_i_a_v.dashboard.klass.pk %}">
+                        <i class="fas fa-fw fa-user-graduate"></i>
+                        <span>{{ g_i_a_v.dashboard.klass }}</span>
+                    </a>
+                {% else %}
+                    {% for i in g_i_a_v.dashboard.klass %}
+                        <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=i.pk %}">
+                            <i class="fas fa-fw fa-user-graduate"></i>
+                            <span>{{ i }}</span>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </li>
+
+            {% if g_i_a_v.profile.user.is_superuser or g_i_a_v.profile.user.is_supervisior %}
+                <hr class="mysto-sidebar-divider">
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:notification_create' %}">
+                        <i class="fas fa-fw fa-comment-alt"></i>
+                        <span>افزودن اطلاعیه</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:notification_manage' %}">
+                        <i class="fas fa-fw fa-comment-alt"></i>
+                        <span>مدیریت اطلاعیه ها</span>
+                    </a>
+                </li>
+            {% else %}
+            {% endif %}
+
+            {% if g_i_a_v.profile.user.is_superuser %}
+                <hr class="mysto-sidebar-divider">
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:category_create' %}">
+                        <i class="fas fa-fw fa-folder-open"></i>
+                        <span>افزودن دسته بندی</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:category_manage' %}">
+                        <i class="fas fa-fw fa-folder-open"></i>
+                        <span>مدیریت دسته بندی ها</span>
+                    </a>
+                </li>
+            {% else %}
+            {% endif %}
+
+            {% if g_i_a_v.profile.user.is_superuser %}
+                <hr class="mysto-sidebar-divider">
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:list_supervisor' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>سرپرست ها</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:list_teacher' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>آموزگار ها</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:list_student' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>دانش آموز ها</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:import_choose' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>افزودن گروهی دانش آموزان</span>
+                    </a>
+                </li>
+            {% elif g_i_a_v.profile.user.is_supervisor %}
+                <hr class="mysto-sidebar-divider">
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:list_teacher' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>آموزگار ها</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:list_student' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>>دانش آموز ها</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:import_choose' %}">
+                        <i class="fas fa-fw fa-user"></i>
+                        <span>افزودن گروهی دانش آموزان</span>
+                    </a>
+                </li>
+            {% else %}
+            {% endif %}
+
+            {% if g_i_a_v.profile.user.is_student %}
+            {% elif g_i_a_v.profile.user.is_supervisor %}
+                <hr class="mysto-sidebar-divider">
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:question_list' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>لیست سوال ها</span>
+                    </a>
+                </li>
+            {% else %}
+                <hr class="mysto-sidebar-divider">
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard:question_create' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>افزودن سوال</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:question_manage' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>مدیریت سوال ها</span>
+                    </a>
+                </li>
+            {% endif %}
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <hr class="mysto-sidebar-divider">
+            <li class="nav-item">
+                {% if g_i_a_v.profile.user.is_supervisor %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_list' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>لیست آزمون ها</span>
+                    </a>
+                {% elif g_i_a_v.profile.user.is_student %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_list' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>لیست آزمون ها</span>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_create' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>افزودن آزمون</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'dashboard:exam_manage' %}">
+                        <i class="fas fa-fw fa-file-alt"></i>
+                        <span>مدیریت آزمون ها</span>
+                    </a>
+                {% endif %}
+
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <hr class="mysto-sidebar-divider">
+            <li class="nav-item">
+                {% if g_i_a_v.profile.user.is_student %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_score' %}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>مشاهده نمرات</span></a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'dashboard:exam_score' %}">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>مشاهده نمرات دانش آموزان</span></a>
+                {% endif %}
+            </li>
+
+
+        </div>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard:login' %}">
+                <i class="fas fa-fw fa-key"></i>
+                <span>برای مشاهده وارد شوید</span></a>
+        </li>
+    {% endif %}
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>

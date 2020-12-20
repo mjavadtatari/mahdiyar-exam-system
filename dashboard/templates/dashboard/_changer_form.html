@@ -1,0 +1,44 @@
+<form action="" method="post" class="all-forms-style table-responsive">
+    {% csrf_token %}
+
+    {% for j in id %}
+        {% include 'azmoon/_form_group_layout.html' with field=j error=j.errors %}
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success btn-block">
+        ویرایش
+        {{ id_name }}
+    </button>
+</form>
+<a href="#" data-toggle="modal" data-target="#deleteCategory" type="submit"
+   class="btn btn-danger btn-block mt-2">
+    حذف
+    {{ id_name }}
+</a>
+<a href="{% url back_url %}" type="submit" class="btn btn-light btn-block mt-2">بازگشت</a>
+
+<!-- Delete Category Modal-->
+<div class="modal fade" id="deleteCategory" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    حذف دسته
+                </h5>
+            </div>
+            <div class="modal-body">
+                به شما پیشنهاد میدهیم به جای حذف دسته بندی از ویرایش دسته بندی
+                استفاده کنید،اما به هر حال، آیا مایل به حذف دسته
+                هستید؟
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">انصراف
+                </button>
+                <a class="btn btn-danger"
+                   href="?delete=True">حذف دسته</a>
+            </div>
+        </div>
+    </div>
+</div>

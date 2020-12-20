@@ -1,0 +1,108 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    داشبورد آموزشگاه
+    {{ academy.name }}
+{% endblock %}
+
+{% block dashboard_name %}
+    <small>صفحه آموزشگاه</small>
+    {{ academy.name }}
+{% endblock %}
+
+
+{% block dashboard_boxes %}
+    {% if g_i_a_v.profile.user.is_superuser or g_i_a_v.profile.user.is_supervisior %}
+        <div class="col-lg-6 mb-4">
+    {% else %}
+        <div class="col-lg-8 mb-4">
+    {% endif %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                اطلاعات کلاس
+            </h6>
+        </div>
+        <div class="card-body overflow-auto" style="height: 25rem;">
+            <div class="row">
+                {% include "dashboard/_dashboard_box.html" with box_color='primary' box_badge='دانش آموز و آموزگار' box_title=academy_people.count box_icon='fa-user-graduate' %}
+                {% include "dashboard/_dashboard_box.html" with box_color='success' box_badge='شماره تلفن' box_title=academy.phone box_icon='fa-phone' %}
+                {% include "dashboard/_dashboard_box.html" with box_color='dark' box_badge='آدرس' box_title=academy.address|linebreaks box_icon='fa-map-marked' %}
+                {% include "dashboard/_dashboard_box.html" with box_color='info' box_badge='سرپرست' box_title=manager box_icon='fa-manager' %}
+            </div>
+        </div>
+    </div>
+    </div>
+    {% if g_i_a_v.profile.user.is_superuser or g_i_a_v.profile.user.is_supervisior %}
+        <div class="col-lg-2 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        کلاس ها
+                    </h6>
+                </div>
+                <div class="card-body overflow-auto" style="height: 25rem;">
+                    {% for i in academy_klass %}
+                        <div class="alert alert-info text-center" role="alert">
+                            <a class="text-decoration-none" href="{% url 'dashboard:klass_view' kls_id=i.pk %}">
+                                {{ i.name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+    {% endif %}
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    آموزگاران
+                </h6>
+            </div>
+            <div class="card-body overflow-auto" style="height: 25rem;">
+                {% for i in academy_teacher %}
+                    <div class="alert alert-info text-center" role="alert">
+                        {{ i.user.get_full_name }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block content_card %}
+    <h4 class="small font-weight-bold">Server Migration <span
+            class="float-left">20%</span></h4>
+    <div class="progress mb-4">
+        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <h4 class="small font-weight-bold">Sales Tracking <span
+            class="float-left">40%</span></h4>
+    <div class="progress mb-4">
+        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <h4 class="small font-weight-bold">Customer Database <span
+            class="float-left">60%</span></h4>
+    <div class="progress mb-4">
+        <div class="progress-bar" role="progressbar" style="width: 60%"
+             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <h4 class="small font-weight-bold">Payout Details <span
+            class="float-left">80%</span></h4>
+    <div class="progress mb-4">
+        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <h4 class="small font-weight-bold">Account Setup <span
+            class="float-left">Complete!</span></h4>
+    <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+{% endblock %}

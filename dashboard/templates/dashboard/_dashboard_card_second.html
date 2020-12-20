@@ -1,0 +1,50 @@
+{% load jalali_tags %}
+<div class="card shadow mb-4" style="height: 30.5rem;">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">{{ card_title }}</h6>
+    </div>
+    <div class="card-body overflow-auto">
+        {% for message in notification %}
+            {% include 'dashboard/_error_alart.html' with notification_box=True message=message %}
+        {% endfor %}
+
+    </div>
+    {% if g_i_a_v.profile.user.is_superuser %}
+        <a href="{% url 'dashboard:notification_manage' %}" type="button" class="btn btn-info btn-block">مدیریت اطلاعیه ها</a>
+    {% endif %}
+</div>
+
+{% if academy_contact %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">تماس با آموزشگاه</h6>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tbody>
+                <tr class="table-borderless">
+                    <th scope="row">
+                        <i class="fas fa-map ml-2"></i>
+                        شهر :
+                    </th>
+                    <td>{{ city }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <i class="fas fa-phone ml-2"></i>
+                        تلفن :
+                    </th>
+                    <td>{{ phone_number }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <i class="fas fa-building ml-2"></i>
+                        آدرس :
+                    </th>
+                    <td>{{ address }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}

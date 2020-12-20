@@ -1,0 +1,75 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    ویرایش
+    {{ page_name }}
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    مدیریت
+                    {{ page_name }}
+                    ها
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }}" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:question_manage' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% else %}
+                    {% if q_instance.question_picture %}
+                            <div class="easyzoom easyzoom--overlay easyzoom--with-toggle">
+                                <img src="{{ q_instance.question_picture.url }}"
+                                     class="mysto-question-image card-img-top img-fluid">
+                            </div>
+                        {% endif %}
+                    <form action="" method="post" class="all-forms-style table-responsive" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% for j in question %}
+                            {% include 'dashboard/_form_group_layout.html' with field=j error=j.errors %}
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-success btn-block">
+                            ویرایش
+                            {{ page_name }}
+                        </button>
+                    </form>
+                    {% for i in all_choice %}
+                        <a href="{% url 'dashboard:choice_change' cho_id=i.pk %}"
+                           class="btn btn-outline-info btn-block mt-2">
+                            ویرایش گزینه
+                            {{ i.choice_position }}
+                        </a>
+                    {% endfor %}
+                    <a href="{% url 'dashboard:question_manage' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

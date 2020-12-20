@@ -1,0 +1,78 @@
+{% load humanize %}
+
+{% if profile %}
+    <!-- Nav Item - User Information -->
+    <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="ml-2 d-none d-lg-inline text-gray-600 small">
+                {{ user.get_full_name }}
+            </span>
+            {% if profile.profile_image %}
+                <img class="img-profile rounded-circle"
+                     src="{{ profile.profile_image.url }}">
+            {% else %}
+                <i class="far fa-laugh-wink fa-2x"></i>
+            {% endif %}
+        </a>
+        <!-- Dropdown - User Information -->
+        <div class="dropdown-menu dropdown-menu-left shadow animated--grow-in"
+             aria-labelledby="userDropdown">
+            {% if profile.user.is_teacher or profile.user.is_supervisor %}
+                <a class="dropdown-item" href="{% url 'dashboard:wallet_transaction_list' %}">
+                    <i class="fas fa-wallet fa-sm fa-fw ml-2 text-gray-400"></i>
+                    کیف پول
+                </a>
+                <a class="dropdown-item" href="{% url 'dashboard:wallet_transaction_list' %}">
+                    <i class="fas fa-money-bill fa-sm fa-fw ml-2 text-gray-400"></i>
+                    اعتبار:
+                {{ profile.get_wallet.get_balance|intcomma }}
+                </a>
+                <div class="dropdown-divider"></div>
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'dashboard:me_view' %}">
+                <i class="fas fa-user fa-sm fa-fw ml-2 text-gray-400"></i>
+                پروفایل
+            </a>
+            <a class="dropdown-item" href="{% url 'dashboard:profile_edit' %}">
+                <i class="fas fa-user-cog fa-sm fa-fw ml-2 text-gray-400"></i>
+                ویرایش مشخصات
+            </a>
+            <a class="dropdown-item" href="{% url 'dashboard:password_edit' %}">
+                <i class="fas fa-key fa-sm fa-fw ml-2 text-gray-400"></i>
+                تغییر رمز عبور
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw ml-2 text-gray-400"></i>
+                خروج
+            </a>
+        </div>
+    </li>
+
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">میخوای بری؟</h5>
+                    {#                    <button class="text-left close" type="button" data-dismiss="modal" aria-label="Close">#}
+                    {#                        <span aria-hidden="true">&times;</span>#}
+                    {#                    </button>#}
+                </div>
+                <div class="modal-body">برای خروج از سایت بر روی دکمه (خروج) کلیک کنید!</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">ماندن</button>
+                    <a class="btn btn-primary" href="{% url "dashboard:logout" %}">خروج</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <a href="{% url 'dashboard:signup' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary ml-1 shadow-sm"><i
+            class="fas fa-pen fa-sm ml-1 text-white-50"></i>ثبت نام در سایت</a>
+    <a href="{% url 'dashboard:login' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-key fa-sm ml-1 text-white-50"></i>ورود به سایت</a>
+{% endif %}

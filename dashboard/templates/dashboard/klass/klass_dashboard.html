@@ -1,0 +1,72 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    {{ klass.name }}
+    |
+    {{ klass.academy.name }}
+{% endblock %}
+
+{% block dashboard_name %}
+    <small>صفحه کلاس</small>
+    {{ klass.name }}
+    <small>از آموزشگاه</small>
+    {{ klass.academy.name }}
+{% endblock %}
+
+{% block dashboard_boxes %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    اطلاعات کلاس
+                </h6>
+            </div>
+            <div class="card-body overflow-auto" style="height: 25rem;">
+                <div class="row">
+                    {% include "dashboard/_dashboard_box.html" with box_color='primary' box_badge='آموزشگاه' box_title=klass.academy.name box_icon='fa-school' %}
+                    {% include "dashboard/_dashboard_box.html" with box_color='danger' box_badge='کلید ثبت نام' box_title=sign_up_key.sign_up_key box_icon='fa-key' %}
+                    {% include "dashboard/_dashboard_box.html" with box_color='success' box_badge='تعداد دانش آموزان' box_title=klass_student.count box_icon='fa-user-graduate' %}
+
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            آموزگار (ها)
+                                        </div>
+                                        {% for i in klass_teacher %}
+                                            <div class="h5 mb-2 font-weight-bold text-gray-800">
+                                                {{ i.user.get_full_name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    دانش آموزان
+                </h6>
+            </div>
+            <div class="card-body overflow-auto" style="height: 25rem;">
+                {% for i in klass_student %}
+                    <div class="alert alert-info text-center" role="alert">
+                        {{ i.user.get_full_name }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    ثبت نام در سامانه
+{% endblock %}
+
+{% block extera_links %}
+    <link href="{% static "dashboard/vendor/fontawesome-free/css/all.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+{% endblock %}
+
+{% block extera_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/sb-admin-2.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/main.css" %}">
+{% endblock %}
+
+{% block inner_body_tag %}
+    class="bg-gradient-primary
+{% endblock %}
+
+{% block container %}
+    <div class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            {% if signup_form.errors %}
+                                {% include 'dashboard/_error_alart.html' with field=signup_form signup_page=True %}
+                            {% endif %}
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">ثبت نام در سامانه</h1>
+                            </div>
+                            <form class="user" method="post" action="">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        {{ signup_form.first_name }}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {{ signup_form.last_name }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ signup_form.email }}
+                                </div>
+                                <div class="form-group">
+                                    {{ signup_form.user_type }}
+                                </div>
+                                <div class="form-group">
+                                    {{ signup_form.username }}
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        {{ signup_form.password1 }}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {{ signup_form.password2 }}
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    ثبت نام
+                                </button>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="{% url 'dashboard:login' %}">قبلاً ثبت نام کردی؟ اینجا کلیک کن و
+                                    وارد شو!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 d-lg-block bg-register-image overflow-auto" style="height: 40rem;">
+                        <div class="my-3 mx-2 p-2 text-justify text-light rounded my-transparent">
+                            {% for message in notification %}
+                                {% include 'dashboard/_error_alart.html' with notification_box=True message=message %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+{% endblock %}
+
+{% block extera_js %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static "dashboard/vendor/jquery/jquery.min.js" %}"></script>
+    <script src="{% static "dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static "dashboard/vendor/jquery-easing/jquery.easing.min.js" %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static "dashboard/js/sb-admin-2.min.js" %}"></script>
+
+
+{% endblock %}
+
+{% block js_files %}
+{% endblock %}
+{% block css_files %}
+{% endblock %}

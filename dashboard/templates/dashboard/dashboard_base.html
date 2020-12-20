@@ -1,0 +1,150 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block extera_links %}
+    <link href="{% static "dashboard/vendor/fontawesome-free/css/all.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+{% endblock %}
+
+{% block extera_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/sb-admin-2.css" %}">
+    <link rel="stylesheet" href="{% static 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/main.css" %}">
+{% endblock %}
+
+{% block inner_body_tag %}
+    id="page-top"
+{% endblock %}
+
+{% block non_container %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        {% block none_sidebar %}
+            <!-- Sidebar -->
+            {% include "dashboard/_dashboard_sidebar.html" %}
+            <!-- End of Sidebar -->
+        {% endblock %}
+
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {% block non_topbar %}
+                    <!-- Topbar -->
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                        <!-- Sidebar Toggle (Topbar) -->
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle ml-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <!-- Topbar Navbar -->
+                        <ul class="navbar-nav mr-auto">
+                            {#                        {% block user_information %}{% endblock %}#}
+                            {% include 'dashboard/_user_information.html' %}
+                        </ul>
+
+                    </nav>
+                    <!-- End of Topbar -->
+                {% endblock %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    {% block dashboard_heading %}
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">{% block dashboard_name %}{% endblock %}</h1>
+                            <div class="badge badge-pill badge-primary m-3 d-block time-sm-position-dashboard">
+                                <h4 class="d-inline">
+                                    <div id="show-now-time-dashboard"></div>
+                                </h4>
+                            </div>
+                        </div>
+                    {% endblock %}
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        {% block dashboard_boxes %}{% endblock %}
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row justify-content-center">
+                        {% block dashboard_content %}
+                            <!-- Content Column -->
+                            <div class="col-lg-6 mb-4">
+                                {% block first_card_place %}{% endblock %}
+                            </div>
+                            <div class="col-lg-6 mb-4">
+                                {% block second_card_place %}{% endblock %}
+                            </div>
+                        {% endblock %}
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>
+                            توسعه داده شده با
+                            <i class="fas fa-heart fa-fw text-danger"></i>
+                            توسط
+                            <a href="https://www.instagram.com/mjavadtatari/" target="_blank">mjavadtatari@</a>
+                        </span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+{% endblock %}
+
+
+{#{% block container %}#}
+{#    <div class="row">#}
+{#        <div class="col-6 col-md-4">.col-6 .col-md-4</div>#}
+{#        <div class="col-md-8">.col-md-8</div>#}
+{#    </div>#}
+{#{% endblock %}#}
+
+
+{% block extera_js %}
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static "dashboard/vendor/jquery/jquery.min.js" %}"></script>
+    <script src="{% static "dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static "dashboard/vendor/jquery-easing/jquery.easing.min.js" %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static "dashboard/js/sb-admin-2.js" %}"></script>
+
+		<script src="{% static 'admin/js/django_jalali.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/main.js' %}"></script>
+
+{% endblock %}
+
+{% block js_files %}
+{% endblock %}
+{% block css_files %}
+{% endblock %}

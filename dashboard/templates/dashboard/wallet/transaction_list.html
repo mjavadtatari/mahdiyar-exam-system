@@ -1,0 +1,103 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load humanize %}
+{% load jalali_tags %}
+
+{% block page_title %}
+    لیست
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    لیست
+                    {{ page_name }}
+                    ها
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:wallet_transaction_list' %}" type="submit"
+                       class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% elif all_transaction %}
+                    <div class="table-responsive">
+                        <table id="crypto-transaction" class="table table-hover table-xl trans-wrapper">
+                            <thead>
+                            <tr>
+                                <th class="border-top-0">شماره</th>
+                                <th class="border-top-0">نوع تراکنش</th>
+                                <th class="border-top-0 text-center">مقدار</th>
+                                <th class="border-top-0">تاریخ و زمان</th>
+                                <th class="border-top-0">توضیحات</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in all_transaction %}
+                                <tr>
+                                    <td>
+                                        <div class="Trans-id">{{ i.pk }}#</div>
+                                    </td>
+                                    <td>
+                                        <div class="status badge
+                                        {% if i.transaction_type is 1 %}
+                                            badge-success
+                                        {% elif i.transaction_type is 2 %}
+                                            badge-danger
+                                        {% endif %}
+                                        badge-pill badge-sm">{{ i.get_transaction_type_display }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="amount text-left">
+                                            {{ i.get_amount_in_list|intcomma:False  }}
+                                            <div class="status badge badge-warning badge-pill badge-sm">آزمون</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="time">{{ i.order_time|to_jalali:'%Y/%m/%d - %H:%M' }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="time">
+                                            {% if i.description %}
+                                                {{ i.description }}
+                                            {% else %}
+                                                ---
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <span class="d-inline-block my-2">
+                    * واحد شمارش اعتبار، تعداد دانش آموزان عضو کلاس می باشد! که با واحد
+                        <div class="status badge badge-warning badge-pill badge-sm">آزمون</div>
+                        نمایش داده میشود.
+                    </span>
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_transaction page_name='page' %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ all_transaction.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

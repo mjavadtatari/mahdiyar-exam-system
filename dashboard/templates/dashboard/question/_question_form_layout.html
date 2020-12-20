@@ -1,0 +1,16 @@
+<div class="col mb-4">
+    <div class="card">
+        <div class="card-body">
+            {% for field in option %}
+                <div class="form-group">
+                    <label for="id_{{ field.name }}">{{ field.label }}</label>
+                    <span class="badge badge-dark">{{ field.help_text }}</span>
+                    {% for i in field.error %}
+                        <span class="badge badge-danger">{{ i }}</span>
+                    {% endfor %}
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

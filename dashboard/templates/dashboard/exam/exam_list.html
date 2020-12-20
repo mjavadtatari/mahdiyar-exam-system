@@ -1,0 +1,75 @@
+{% extends 'dashboard/dashboard_base.html' %}
+
+{% block page_title %}
+    لیست
+    {{ page_name }}
+    ها
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary d-inline">
+                    لیست
+                    {{ page_name }}
+                    ها
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if output_msg %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:exam_list' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:exam_score' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        مشاهده نمرات
+                        {{ page_name }}
+                        ها
+                    </a>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% elif all_exam %}
+                    {% for i in all_exam %}
+                        <div class="alert
+                        {% if i.is_active %}
+                            alert-success
+                        {% else %}
+                            alert-secondary
+                        {% endif %}
+                         text-center pb-3" role="alert">
+                            <a class="text-decoration-none text-dark">
+                                {{ i }}
+                            </a>
+                            {% if i.is_active %}
+                                <a href="{% url 'dashboard:exam_info' exa_id=i.pk %}"
+                                   class="btn btn-outline-primary btn-sm float-left">
+                                    شرکت در آزمون
+                                </a>
+                            {% else %}
+                                {#                                <a href="{% url 'dashboard:exam_start' exa_id=i.pk %}"#}
+                                {#                                   class="btn btn-outline-primary btn-sm float-left">#}
+                                {#                                    مشاهده نتایج#}
+                                {#                                </a>#}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_exam page_name='page' %}
+                {% else %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ all_exam.error }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
