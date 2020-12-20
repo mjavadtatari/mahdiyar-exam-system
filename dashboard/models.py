@@ -407,6 +407,7 @@ class ExamPerStudent(models.Model):
         else:
             now_time = datetime.now()
             if now_time >= self.STU_finish:
+                self.STU_remain_time = 0
                 return -1
             remain = self.STU_finish - now_time
             self.STU_remain_time = remain
@@ -550,6 +551,16 @@ def is_start_time(exam):
         return True
 
 
+def is_exam_time(exam):
+    now_time = datetime.now()
+    if now_time <= exam.exam_start:
+        return -1  # not started yet
+    elif now_time >= exam.exam_finish:
+        return 1  # exam finished
+    else:
+        return 0  # now available
+
+
 def get_random_string(length):
     result_str = ''
     for i in range(length):
@@ -581,4 +592,7 @@ class SignUpKey(models.Model):
 @receiver(post_save, sender='dashboard.Klass')
 def create_klass_signup_key(sender, instance, created, **kwargs):
     if created:
-        SignUpKey.objects.create(klass=instance)
+        while True:
+            temp_signup_key = SignUpKey.objects.create(klass=instance)
+            if temp_signup_key:
+                break

@@ -80,38 +80,7 @@
                     {% endfor %}
 
                 <div class="my-2">
-                    <nav aria-label="Page navigation">
-                        {% if question.has_other_pages %}
-                            <ul class="pagination justify-content-center">
-                                {% if question.has_next %}
-                                    <li class="page-item"><a class="page-link"
-                                                             href="?question={{ question.next_page_number }}">بعدی</a>
-                                    </li>
-                                {% else %}
-                                    <li class="page-item disabled"><a class="page-link" href="#">بعدی</a></li>
-                                {% endif %}
-
-                                {% for i in question.paginator.page_range reversed %}
-                                    {% if question.number == i %}
-                                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
-                                    {% else %}
-                                        <li class="page-item"><a class="page-link" href="?question={{ i }}">{{ i }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-
-
-                                {% if question.has_previous %}
-                                    <li class="page-item"><a class="page-link"
-                                                             href="?question={{ question.previous_page_number }}"
-                                                             tabindex="-1">قبلی</a></li>
-                                {% else %}
-                                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">قبلی</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        {% endif %}
-                    </nav>
+                {% include 'dashboard/_pagination_template.html' with function_return_name=question page_name='question' long='True' long_list=page_range %}
                 </div>
             </div>
         </div>

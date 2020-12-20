@@ -82,10 +82,13 @@ WSGI_APPLICATION = 'online_exam_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'mystoback',
         'NAME': 'mystoback',
-        # mysto
+        # mystoyar
+        # 'USER': 'postgres',
         'USER': 'postgres',
-        # mystomtmahdiyar
+        # mystomahdiyar
+        # 'PASSWORD': '97714130',
         'PASSWORD': '97714130',
         # 5JvGm6%y8!a7Nw#yint*O
         'HOST': '127.0.0.1',

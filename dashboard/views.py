@@ -71,6 +71,16 @@ def pagination_show(request, all_objects, divide_by=6):
         return pagination_template(request, source=all_objects, divide_by=divide_by)
 
 
+def pagination_show_long(request, all_objects, divide_by=6):
+    if len(all_objects) == 0:
+        return {
+            'color': 'danger',
+            'text': ' موردی یافت نشد!',
+        }
+    else:
+        return pagination_template_long(request, source=all_objects, divide_by=divide_by)
+
+
 def signup_view(request):
     notification = Notification.objects.filter(show_on_signup=True).order_by('-date')
     if request.method == 'POST':
@@ -232,7 +242,10 @@ def student_dashboard(request):
     temp_student = Profile.objects.get(Q(user=temp_user) & Q(user__is_student=True))
     temp_academy = temp_profile.academy
     temp_klass = temp_profile.klass.all()
-    temp_klass = temp_klass[0]
+    try:
+        temp_klass = temp_klass[0]
+    except:
+        temp_klass = None
     temp_exam = Exam.objects.filter(exam_klass=temp_klass)
     temp_score = StudentScore.objects.filter(student=temp_student)
     return {
@@ -312,7 +325,8 @@ def sign_up_key_view(request):
         sign_up_key = SignUpKeyCheckerForm()
     if profile.klass:
         temp_kls2 = profile.klass.all()
-        current_key = SignUpKey.objects.get(klass=temp_kls2[0]).pk
+        if temp_kls2.count() != 0:
+            current_key = SignUpKey.objects.get(klass=temp_kls2[0]).pk
     context = {
         'profile': profile,
         'g_i_a_v': g_i_a_v,
@@ -1055,7 +1069,7 @@ def examination_show(request, all_objects, page_name='page'):
             'text': ' موردی یافت نشد!',
         }
     else:
-        return pagination_template(request, source=all_objects, page_name=page_name, divide_by=1)
+        return pagination_template_long(request, source=all_objects, page_name=page_name, divide_by=1)
 
 
 @login_required
@@ -1166,10 +1180,21 @@ def exam_change_view(request, exa_id):
 def exam_info_view(request, exa_id):
     g_i_a_v = goes_in_all_view(request)
     exam = Exam.objects.get(pk=exa_id)
+    resume_exam = False
+    print(is_first_time(exam=exam, student=g_i_a_v['profile']))
+    if not is_first_time(exam=exam, student=g_i_a_v['profile']):
+        if is_exam_time(exam) == 0:
+            exam_per_student = ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=exam)
+            exam_per_student.update_remain_time()
+            if exam_per_student.STU_remain_time != 0:
+                resume_exam = 'during'
+            else:
+                resume_exam = 'submited'
     context = {
         'page_name': 'آزمون',
         'g_i_a_v': g_i_a_v,
         'exam': exam,
+        'resume_exam': resume_exam,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/exam/exam_info.html', context)
@@ -1260,9 +1285,9 @@ def exam_examing_view(request, exa_id):
 
     question_answers = exam_per_student.STU_answers
 
-    question = examination_show(request, question, 'question')
-    question_choices = examination_show(request, question_choices, 'question')
-    question_answers = examination_show(request, question_answers, 'question')
+    question, page_range = examination_show(request, question, 'question')
+    question_choices, page_range = examination_show(request, question_choices, 'question')
+    question_answers, page_range = examination_show(request, question_answers, 'question')
 
     has_answered = question_answers[0]
     if Choice.objects.filter(pk=has_answered).count() != 0:
@@ -1279,6 +1304,7 @@ def exam_examing_view(request, exa_id):
         'g_i_a_v': g_i_a_v,
         'exam': exam,
         'question': question,
+        'page_range': page_range,
         'question_choices': question_choices,
         'remaining_time': remaining_time,
         'success_alert': success_alert,
@@ -1443,7 +1469,7 @@ def supervisor_exam_score_list_view(request, exa_id):
 
     all_score = StudentScore.objects.filter(exam=exam)
 
-    all_score = pagination_show(request, all_score, divide_by=6)
+    all_score, page_range = pagination_show_long(request, all_score, divide_by=6)
     if len(all_score) == 0:
         output_msg = {
             'color': 'danger',
@@ -1454,6 +1480,7 @@ def supervisor_exam_score_list_view(request, exa_id):
         'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_score': all_score,
+        'page_range': page_range,
         'exa_id': exa_id,
         'profile': g_i_a_v['profile'],
     }

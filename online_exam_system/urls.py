@@ -20,11 +20,15 @@ from django.urls import path, include
 from dashboard import views
 from online_exam_system import settings
 
+# from django.conf.urls.static import static
+
+
 urlpatterns = [
     path('', views.home_page_view, name='home_page'),
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls')),
 ]
+# ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     from django.conf.urls.static import static
