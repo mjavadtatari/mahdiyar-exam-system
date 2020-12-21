@@ -14,16 +14,26 @@
     <div class="col-lg-8 mb-4">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary d-inline">
-                    مدیریت
-                    {{ page_name }}
-                    ها
-                </h6>
-                <a href="{% url 'dashboard:exam_create' %}" class="btn btn-success btn-sm float-left">
-                    ساخت
-                    {{ page_name }}
-                    جدید
-                </a>
+                <div class="row">
+                    <div class="col-sm">
+                        <h6 class="m-0 font-weight-bold text-primary d-inline">
+                            مدیریت
+                            {{ page_name }}
+                            ها
+                        </h6>
+                    </div>
+                    <div class="col-sm-5 text-left">
+                        <a href="{% url 'dashboard:copy_obj' name='exam' %}" class="btn btn-warning text-dark btn-sm">
+                            کپی
+                            {{ page_name }}
+                        </a>
+                        <a href="{% url 'dashboard:exam_create' %}" class="btn btn-success btn-sm">
+                            ساخت
+                            {{ page_name }}
+                            جدید
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 {% if output_msg %}
@@ -49,9 +59,8 @@
                          text-center pb-3" role="alert">
                             <div class="row">
                                 <div class="col-sm my-lg-0 my-2">
-                                    <span class="text-decoration-none text-dark d-block">
-                                {{ i }}
-                            </span>
+                                    <span class="text-decoration-none text-dark">{{ i }}</span>
+                                    <span class="badge rounded-pill bg-warning text-dark">{{ i.exam_klass }}</span>
                                 </div>
                                 <div class="col-sm-2 my-lg-0 my-2">
                                     <a href="{% url 'dashboard:exam_change' exa_id=i.pk %}"

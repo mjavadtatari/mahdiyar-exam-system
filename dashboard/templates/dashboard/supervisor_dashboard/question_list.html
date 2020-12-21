@@ -17,11 +17,14 @@
             <div class="card-header py-3">
                 <div class="row">
                     <div class="col-sm">
-                        <h6 class="my-2 font-weight-bold text-primary d-block">
+                        <h6 class="my-2 font-weight-bold text-primary d-inline-block">
                             لیست
                             {{ page_name }}
                             ها
                         </h6>
+                        <a href="{% url 'dashboard:list_all' name='question' %}" class="badge badge-pill badge-info">
+                            لیست کامل
+                        </a>
                     </div>
                     <div class="col-sm">
                         <form method="post" action="" class="form-inline my-2 my-lg-0 float-lg-left">
@@ -108,7 +111,7 @@
                             </div>
                         </div>
                     {% endfor %}
-                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_out page_name='page' %}
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_out page_name='page' long='True' long_list=page_range %}
                 {% else %}
                     <div class="alert alert-danger text-center" role="alert">
                         {{ all_out.error }}

@@ -52,6 +52,11 @@
                                     <th class="border-top-0">نام</th>
                                     <th class="border-top-0">تلفن</th>
                                     <th class="border-top-0">دکمه ها</th>
+                                {% elif name == 'question' %}
+                                    <th class="border-top-0">سوال</th>
+                                    <th class="border-top-0">طراح</th>
+                                    <th class="border-top-0">دسته بندی</th>
+                                    <th class="border-top-0">دکمه ها</th>
                                 {% else %}
                                     <th class="border-top-0">نام و نام خانوادگی</th>
                                     <th class="border-top-0">کد ملی</th>
@@ -95,6 +100,27 @@
                                             <a href="{% url 'dashboard:academy_view' aca_id=i.pk %}"
                                                class="badge badge-pill badge-info">مشاهده</a>
                                             <a href="{% url 'dashboard:delete_none_uuid' name='academy' obj_id=i.pk %}"
+                                               class="badge badge-pill badge-danger">حذف</a>
+                                        </td>
+                                    {% elif name == 'question' %}
+                                        <td>
+                                            <div class="Trans-id" style="font-size: 14px">{{ i }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="Trans-id"
+                                                 style="font-size: 13px">{{ i.creator.user.get_full_name }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="Trans-id" style="font-size: 13px">
+                                                {{ i.category.name }}
+                                                -
+                                                {{ i.category.parent.name }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'dashboard:question_change' qes_id=i.pk %}"
+                                               class="badge badge-pill badge-info">ویرایش</a>
+                                            <a href="{% url 'dashboard:delete_uuid' name='question' obj_uuid=i.pk %}"
                                                class="badge badge-pill badge-danger">حذف</a>
                                         </td>
                                     {% else %}

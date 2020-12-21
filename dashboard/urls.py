@@ -85,6 +85,11 @@ urlpatterns = [
     path('list/student/', views.list_student_view, name='list_student'),
     path('list/all/<str:name>/', views.list_all_view, name='list_all'),
 
+    path('copy/obj/<str:name>/', views.copy_object_view, name='copy_obj'),
+
     path('wallet/<int:wal_id>/', views.wallet_increase_view, name='wallet_increase'),
     path('wallet/transaction/list/', views.wallet_transaction_list_view, name='wallet_transaction_list'),
+
+
+    path('admin/ec/score/', views.extra_exam_checker, name='extra_exam_checker'),
 ]

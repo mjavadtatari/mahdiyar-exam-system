@@ -372,3 +372,15 @@ class ImportStudentForm(forms.Form):
 class ChangePasswordForm(forms.Form):
     password = forms.CharField(max_length=100, label='رمز عبور جدید',
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class CopyObjectForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(CopyObjectForm, self).__init__(*args, **kwargs)
+        self.fields['exam'] = forms.ModelChoiceField(label='از آزمون',
+                                                      widget=forms.Select(attrs={'class': 'form-control'}),
+                                                      queryset=Exam.objects.all())
+        self.fields['klass'] = forms.ModelChoiceField(label='برای کلاس',
+                                                     widget=forms.Select(attrs={'class': 'form-control'}),
+                                                     queryset=Klass.objects.all())
+

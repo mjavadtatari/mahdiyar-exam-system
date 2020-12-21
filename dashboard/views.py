@@ -1050,12 +1050,13 @@ def question_list_supervisor_view(request):
             'color': 'danger',
             'text': 'موردی برای نمایش وجود ندارد!'
         }
-    all_out = pagination_show(request, all_out, divide_by=2)
+    all_out, page_range = pagination_show_long(request, all_out, divide_by=2)
     context = {
         'page_name': 'سوال',
         'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_out': all_out,
+        'page_range': page_range,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/supervisor_dashboard/question_list.html', context)
@@ -1808,6 +1809,9 @@ def list_all_view(request, name):
     elif name == 'supervisor':
         page_name = 'سرپرست'
         all_obj = g_i_a_v['dashboard']['supervisor']
+    elif name == 'question':
+        page_name = 'سوال'
+        all_obj = g_i_a_v['dashboard']['question']
     else:
         raise Http404()
 
@@ -1816,6 +1820,7 @@ def list_all_view(request, name):
             'color': 'danger',
             'text': 'موردی یافت نشد!',
         }
+
     all_obj, page_range = pagination_template_long(request, all_obj, divide_by=30)
     context = {
         'name': name,
@@ -1965,6 +1970,53 @@ def changepass_user_view(request, user_id, name):
     return render(request, 'dashboard/delete/changepass_message.html', context)
 
 
+# //////////////////////////////////////////// COPIES ///////////////////////////////////////////
+@login_required
+@permission_required(
+    ['dashboard.delete_notification'], raise_exception=True)
+def copy_object_view(request, name):
+    g_i_a_v = goes_in_all_view(request)
+    errors, output_msg, all_obj, page_name = None, None, None, None
+    if name == 'exam':
+        page_name = 'آزمون'
+        if request.method == 'POST':
+            all_obj = CopyObjectForm(request.POST)
+            if all_obj.is_valid():
+                exam = all_obj.cleaned_data['exam']
+                klass = all_obj.cleaned_data['klass']
+                exam.update_exam_status()
+                if exam.is_active:
+                    new_exam = exam
+                    new_exam.pk = None
+                    new_exam.save()
+                    new_exam.exam_klass = klass
+                    new_exam.save()
+                    output_msg = {
+                        'color': 'success',
+                        'text': 'آزمون با موفقیت کپی شد!',
+                    }
+                else:
+                    output_msg = {
+                        'color': 'danger',
+                        'text': 'زمان آزمون به پایان رسیده است!',
+                    }
+
+        else:
+            all_obj = CopyObjectForm()
+    else:
+        pass
+    context = {
+        'g_i_a_v': g_i_a_v,
+        'page_name': page_name,
+        'all_obj': all_obj,
+        'name': name,
+        'output_msg': output_msg,
+        'errors': errors,
+        'profile': g_i_a_v['profile'],
+    }
+    return render(request, 'dashboard/superuser_dashboard/copy_object.html', context)
+
+
 # //////////////////////////////////////////// IMPORTS ///////////////////////////////////////////
 @login_required
 @permission_required(
@@ -2048,3 +2100,22 @@ def import_student_view(request, aca_id):
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/superuser_dashboard/import_student.html', context)
+
+
+def extra_exam_checker(request):
+    all_scores = StudentScore.objects.all()
+    all_exams = []
+    all_student = []
+    for i in all_scores:
+        if i.exam not in all_exams:
+            all_exams.append(i.exam)
+        if i.student not in all_student:
+            all_student.append(i.student)
+    for i in all_exams:
+        for j in all_student:
+            if StudentScore.objects.filter(Q(exam=i) & Q(student=j)).count() > 1:
+                temp_x = StudentScore.objects.filter(Q(exam=i) & Q(student=j))
+                for k in range(1, len(temp_x)):
+                    temp_x[k].delete()
+
+    return HttpResponse('Done')
