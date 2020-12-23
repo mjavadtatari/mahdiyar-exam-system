@@ -93,4 +93,5 @@ urlpatterns = [
     path('wallet/transaction/list/', views.wallet_transaction_list_view, name='wallet_transaction_list'),
 
     path('admin/ec/score/', views.extra_exam_checker, name='extra_exam_checker'),
+    path('admin/ec/rescore/<academy_id:aca_id>/', views.extra_score_checker, name='extra_score_checker'),
 ]

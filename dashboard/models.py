@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group, Permission, AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -437,6 +438,14 @@ class ExamPerStudent(models.Model):
         return StudentScore.objects.create(student=self.student, exam=self.exam, all_questions=len(all_choices),
                                            score=score,
                                            percentage=percentage)
+
+    def re_calculate_the_score(self):
+        try:
+            temp_score = StudentScore.objects.get(student=self.student, exam=self.exam)
+            temp_score.delete()
+            self.calculate_the_score()
+        except ObjectDoesNotExist:
+            pass
 
     def save_answer(self, question, answer):
         if answer is None:

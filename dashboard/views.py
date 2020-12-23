@@ -2157,6 +2157,11 @@ def import_student_view(request, aca_id):
     return render(request, 'dashboard/superuser_dashboard/import_student.html', context)
 
 
+# //////////////////////////////////////////// CHECKERS ///////////////////////////////////////////
+
+@login_required
+@permission_required(
+    ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
 def extra_exam_checker(request):
     all_scores = StudentScore.objects.all()
     all_exams = []
@@ -2172,5 +2177,16 @@ def extra_exam_checker(request):
                 temp_x = StudentScore.objects.filter(Q(exam=i) & Q(student=j))
                 for k in range(1, len(temp_x)):
                     temp_x[k].delete()
+
+    return HttpResponse('Done')
+
+
+@login_required
+@permission_required(
+    ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
+def extra_score_checker(request, aca_id):
+    all_eps = ExamPerStudent.objects.filter(exam__exam_klass__academy_id=aca_id)
+    for i in all_eps:
+        i.re_calculate_the_score()
 
     return HttpResponse('Done')
