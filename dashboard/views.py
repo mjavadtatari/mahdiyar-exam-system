@@ -994,6 +994,15 @@ def choice_change_view(request, cho_id):
         choice = ChoiceChangeForm(request.POST, instance=c_instance)
         if choice.is_valid():
             choice.save()
+            if Choice.objects.get(pk=cho_id).is_correct:
+                temp_q = Choice.objects.get(pk=cho_id).choice_question
+                temp_chs = Choice.objects.filter(choice_question=temp_q)
+
+                for i in temp_chs:
+                    if i.pk != cho_id:
+                        i.is_correct = False
+                        i.save()
+
             output_msg = {
                 'color': 'success',
                 'text': 'گزینه با موفقیت ویرایش شد!'
