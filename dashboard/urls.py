@@ -72,6 +72,8 @@ urlpatterns = [
          name='exam_klass_list_score'),
     path('exam/score/exam/<uuid:exa_id>/', views.supervisor_exam_list_for_score_view, name='exam_list_score'),
     path('exam/score/exam/<uuid:exa_id>/list/', views.supervisor_exam_score_list_view, name='exam_score_list'),
+    path('exam/score/exam/<uuid:exa_id>/list/<int:student>/', views.supervisor_exam_score_for_student_list_view,
+         name='exam_score_for_student_list'),
     path('exam/score/exam/<uuid:exa_id>/excel/', views.supervisor_exam_score_excel_view, name='exam_score_excel'),
 
     # path('exam/score/<uuid:exa_id>/', views.exam_score_list_supervisor_view, name='exam_score_list'),
@@ -89,7 +91,6 @@ urlpatterns = [
 
     path('wallet/<int:wal_id>/', views.wallet_increase_view, name='wallet_increase'),
     path('wallet/transaction/list/', views.wallet_transaction_list_view, name='wallet_transaction_list'),
-
 
     path('admin/ec/score/', views.extra_exam_checker, name='extra_exam_checker'),
 ]

@@ -1470,12 +1470,16 @@ def supervisor_exam_score_list_view(request, exa_id):
 
     all_score = StudentScore.objects.filter(exam=exam)
 
-    all_score, page_range = pagination_show_long(request, all_score, divide_by=6)
     if len(all_score) == 0:
+        all_score = None
+        page_range = None
         output_msg = {
             'color': 'danger',
             'text': 'موردی برای نمایش وجود ندارد!'
         }
+    else:
+        all_score, page_range = pagination_show_long(request, all_score, divide_by=6)
+
     context = {
         'page_name': 'نمره',
         'g_i_a_v': g_i_a_v,
@@ -1486,6 +1490,48 @@ def supervisor_exam_score_list_view(request, exa_id):
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/exam/exam_score_list.html', context)
+
+
+@login_required
+def supervisor_exam_score_for_student_list_view(request, exa_id, student):
+    g_i_a_v = goes_in_all_view(request)
+    output_msg = None
+    exam = Exam.objects.get(pk=exa_id)
+    the_student = ExamPerStudent.objects.get(student=student, exam__exam_id=exa_id)
+    page_name = 'پاسخ های دانش آموز: {}'.format(the_student.student.user.get_full_name())
+
+    all_question = list([Question.objects.get(pk=i), 'dark'] for i in the_student.STU_questions)
+    right_answer = []
+    for i in the_student.STU_questions:
+        temp_x = Choice.objects.filter(choice_question_id=i)
+        for j in temp_x:
+            if j.is_correct:
+                right_answer.append([j.choice_label, 'dark'])
+
+    all_answer = []
+    for i in the_student.STU_answers:
+        if Choice.objects.filter(choice_id=i).count() == 1:
+            tmep_z = []
+            tmep_z.append(Choice.objects.get(choice_id=i).choice_label)
+            if Choice.objects.get(choice_id=i).is_correct:
+                tmep_z.append('success')
+            else:
+                tmep_z.append('danger')
+            all_answer.append(tmep_z)
+        else:
+            all_answer.append(['بدون پاسخ', 'warning'])
+
+    all_score = list([all_question[i], right_answer[i], all_answer[i]] for i in range(len(all_question)))
+
+    context = {
+        'page_name': page_name,
+        'g_i_a_v': g_i_a_v,
+        'output_msg': output_msg,
+        'all_score': all_score,
+        'exa_id': exa_id,
+        'profile': g_i_a_v['profile'],
+    }
+    return render(request, 'dashboard/exam/exam_score_per_student.html', context)
 
 
 @login_required

@@ -2,9 +2,7 @@
 {% load jalali_tags %}
 
 {% block page_title %}
-    لیست
     {{ page_name }}
-    ها
 {% endblock %}
 
 {% block dashboard_heading %}
@@ -18,16 +16,8 @@
                 <div class="row">
                     <div class="col-sm mb-lg-0 m-2">
                         <h6 class="m-0 font-weight-bold text-primary d-inline">
-                            لیست
                             {{ page_name }}
-                            ها
                         </h6>
-                    </div>
-                    <div class="col-sm-3 d-inline-block">
-                        <a href="{% url 'dashboard:exam_score_excel' exa_id=exa_id %}"
-                           class="btn btn-sm btn-outline-success btn-block">
-                            دریافت خروجی اکسل
-                        </a>
                     </div>
                 </div>
             </div>
@@ -38,52 +28,37 @@
                     </div>
                     <a href="{% url 'dashboard:exam_score' %}" type="submit" class="btn btn-light btn-block mt-2">
                         بازگشت به لیست
-                        {{ page_name }}
+                        نمره
                         ها
                     </a>
                     <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
                         بازگشت به پنل کاربری
                     </a>
                 {% elif all_score %}
+
                     <div class="table-responsive">
                         <table id="crypto-transaction" class="table table-hover table-xl trans-wrapper">
                             <thead>
                             <tr>
-                                <th class="border-top-0">نام و نام خانوادگی</th>
-                                <th class="border-top-0">کد ملی</th>
-                                <th class="border-top-0">کل پاسخ ها</th>
-                                <th class="border-top-0">نمره</th>
-                                <th class="border-top-0">درصد</th>
+                                <th class="border-top-0">سوال</th>
+                                <th class="border-top-0">گزینه صحیح</th>
+                                <th class="border-top-0">پاسخ دانش آموز</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for i in all_score %}
                                 <tr>
-                                    <td>
-                                        <div class="Trans-id"><a
-                                                href="{% url 'dashboard:exam_score_for_student_list' exa_id=exa_id student=i.student.pk %}">{{ i.student.user.get_full_name }}</a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="time">{{ i.student.passport_number }}</div>
-                                    </td>
-                                    <td>
-                                        <div class="amount">
-                                            {{ i.all_questions }}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="time">{{ i.score|floatformat }}</div>
-                                    </td>
-                                    <td>
-                                        <div class="time">% {{ i.percentage|floatformat }}</div>
-                                    </td>
+                                    {% for j,k in i %}
+                                        <td>
+                                            <div class="Trans-id text-{{ k }}" style="font-size: 13px">{{ j }}
+                                            </div>
+                                        </td>
+                                    {% endfor %}
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_score page_name='page' long='True' long_list=page_range %}
                 {% else %}
                     <div class="alert alert-danger text-center" role="alert">
                         {{ all_out.error }}
