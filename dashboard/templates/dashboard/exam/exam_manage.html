@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     {% endfor %}
-                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_exam page_name='page' %}
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=all_exam page_name='page' long_list=page_range long="True" %}
                 {% else %}
                     <div class="alert alert-danger text-center" role="alert">
                         {{ all_exam.error }}

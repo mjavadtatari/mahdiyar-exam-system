@@ -1144,11 +1144,14 @@ def exam_manage_view(request):
         output_msg = None
     for i in all_exam:
         i.update_exam_status()
+
+    all_exam, page_range = pagination_show_long(request, all_exam)
     context = {
         'page_name': 'آزمون',
         'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
-        'all_exam': pagination_show(request, all_exam),
+        'all_exam': all_exam,
+        'page_range': page_range,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/exam/exam_manage.html', context)
