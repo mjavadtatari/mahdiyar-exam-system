@@ -21,7 +21,7 @@
                     <a href="{% url 'dashboard:exam_end' exa_id=exam.pk %}" type="button"
                        class="btn btn-danger pt-2 px-3 mb-2 ml-lg-2" style="height: 45px;">خاتمه آزمون</a>
                     <span class="btn btn-warning text-dark btn-icon-split mb-2" style="height: 45px">
-                        <p id="timer" class="text pt-2" style="width: 200px;"></p>
+                        <p id="timer" class="text pt-2" style="width: 230px;"></p>
                             <span class="icon text-white-50">
                           <i class="fas fa-clock mt-2"></i>
                         </span>
@@ -80,8 +80,44 @@
                     {% endfor %}
 
                 <div class="my-2">
-                {% include 'dashboard/_pagination_template.html' with function_return_name=question page_name='question' long='True' long_list=page_range %}
+                    {% include 'dashboard/_pagination_template.html' with function_return_name=question page_name='question' long='True' long_list=page_range %}
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="float-right my-3 mx-0 font-weight-bold text-primary d-inline">
+                    پاسخنامه شما
+                </h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                    {% for i, j in all_objects %}
+                        <tr>
+                            <td class="table-active">
+                                <a href="?question={{ i }}">
+                                    سوال
+                                    {{ i }}
+                                </a>
+                            </td>
+                            <td
+                                    {% if j == 'سفید' %}
+                                        class="table-danger"
+                                    {% endif %}
+                            >
+                                {{ j }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -36,88 +36,96 @@
                     </a>
                 {% elif all_out %}
                     {% for i in all_out %}
-                        <div class="alert
+                        {% if i.score == 'exam_not_finished_yet' %}
+                            <div class="alert alert-danger text-center pb-3" role="alert">
+                                نمره (
+                                {{ i.exam }}
+                                ) هنوز محاسبه نشده است.
+                            </div>
+                        {% else %}
+                            <div class="alert
                         {% if i.exam.is_active %}
                             alert-success
                         {% else %}
                             alert-secondary
                         {% endif %}
                         text-center pb-3" role="alert">
-                            <a class="text-decoration-none text-dark mb-3">
-                                آزمون:
-                                {{ i.exam }}
-                            </a>
-                            <div class="row mt-3">
-                                <div class="col-sm text-center">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                        <tr>
-                                            <th scope="col">تعداد کل سوالات:</th>
-                                            <th scope="col">{{ i.exam.exam_question.count }}</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">پاسخ های صحیح:</th>
-                                            <td>{{ i.score.score|floatformat }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">درصد نمره:</th>
-                                            <td>{{ i.score.percentage|floatformat }}%</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-sm text-center">
-                                    <table class="table table-borderless">
-                                        <tbody>
-                                        <tr>
-                                            <th scope="col">پاسخ داده شده:</th>
-                                            <th scope="col">{{ i.score.all_questions }}</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">نمره کل:</th>
-                                            <td>{{ i.score.score|floatformat }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">وضعیت دانش آموز:</th>
+                                <a class="text-decoration-none text-dark mb-3">
+                                    آزمون:
+                                    {{ i.exam }}
+                                </a>
+                                <div class="row mt-3">
+                                    <div class="col-sm text-center">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="col">تعداد کل سوالات:</th>
+                                                <th scope="col">{{ i.exam.exam_question.count }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">پاسخ های صحیح:</th>
+                                                <td>{{ i.score.score|floatformat }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">درصد نمره:</th>
+                                                <td>{{ i.score.percentage|floatformat }}%</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm text-center">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="col">پاسخ داده شده:</th>
+                                                <th scope="col">{{ i.score.all_questions }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">نمره کل:</th>
+                                                <td>{{ i.score.score|floatformat }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">وضعیت دانش آموز:</th>
+                                                {% if i.eps %}
+                                                    <td>حاضر</td>
+                                                {% elif i.exam.is_active %}
+                                                    <td>انتظار</td>
+                                                {% else %}
+                                                    <td>غایب</td>
+                                                {% endif %}
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm text-center">
+                                        {% if i.exam.is_active %}
                                             {% if i.eps %}
-                                                <td>حاضر</td>
-                                            {% elif i.exam.is_active %}
-                                                <td>انتظار</td>
-                                            {% else %}
-                                                <td>غایب</td>
-                                            {% endif %}
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-sm text-center">
-                                    {% if i.exam.is_active %}
-                                        {% if i.eps %}
-                                            <span class="btn btn-outline-dark btn-sm btn-block">
+                                                <span class="btn btn-outline-dark btn-sm btn-block">
                                                 آزمون انجام شده است
                                             </span>
+                                            {% else %}
+                                                <a href="{% url 'dashboard:exam_info' exa_id=i.exam.pk %}"
+                                                   class="btn btn-outline-primary btn-sm btn-block">
+                                                    شرکت در آزمون
+                                                </a>
+                                            {% endif %}
                                         {% else %}
-                                            <a href="{% url 'dashboard:exam_info' exa_id=i.exam.pk %}"
-                                               class="btn btn-outline-primary btn-sm btn-block">
-                                                شرکت در آزمون
-                                            </a>
-                                        {% endif %}
-                                    {% else %}
-                                        <span class="btn btn-outline-danger btn-sm btn-block">
+                                            <span class="btn btn-outline-danger btn-sm btn-block">
                                     زمان آزمون گذشته است
                                 </span>
-                                    {% endif %}
-                                    <span class="btn btn-outline-dark btn-sm btn-block">
+                                        {% endif %}
+                                        <span class="btn btn-outline-dark btn-sm btn-block">
                                         زمان ورود:
                                         {{ i.eps.STU_start|to_jalali:'%Y/%m/%d, %H:%M' }}
                                 </span>
-                                    <span class="btn btn-outline-dark btn-sm btn-block">
+                                        <span class="btn btn-outline-dark btn-sm btn-block">
                                         زمان خروج:
                                         {{ i.eps.STU_finish|to_jalali:'%Y/%m/%d, %H:%M' }}
                                 </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
                     {% include 'dashboard/_pagination_template.html' with function_return_name=all_out page_name='page' long='True' long_list=page_range %}
                 {% elif all_klass %}

@@ -23,6 +23,14 @@
                             ها
                         </h6>
                     </div>
+                    {% if profile.user.is_superuser %}
+                        <div class="col-sm-3 d-inline-block mb-2">
+                            <a href="{% url 'dashboard:extra_score_checker' exa_id=exa_id %}"
+                               class="btn btn-sm btn-outline-danger btn-block">
+                                محاسبه مجدد نمره آزمون
+                            </a>
+                        </div>
+                    {% endif %}
                     <div class="col-sm-3 d-inline-block">
                         <a href="{% url 'dashboard:exam_score_excel' exa_id=exa_id %}"
                            class="btn btn-sm btn-outline-success btn-block">
@@ -43,6 +51,13 @@
                     </a>
                     <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
                         بازگشت به پنل کاربری
+                    </a>
+                {% elif message %}
+                    <div class="alert alert-success text-center" role="alert">
+                        نمره های این آزمون مجدد محاسبه شدند!
+                    </div>
+                    <a href="{% url 'dashboard:exam_score_list' exa_id=exa_id %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به لیست نمرات آزمون
                     </a>
                 {% elif all_score %}
                     <div class="table-responsive">

@@ -1194,7 +1194,7 @@ def exam_info_view(request, exa_id):
     g_i_a_v = goes_in_all_view(request)
     exam = Exam.objects.get(pk=exa_id)
     resume_exam = False
-    print(is_first_time(exam=exam, student=g_i_a_v['profile']))
+
     if not is_first_time(exam=exam, student=g_i_a_v['profile']):
         if is_exam_time(exam) == 0:
             exam_per_student = ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=exam)
@@ -1297,6 +1297,14 @@ def exam_examing_view(request, exa_id):
         success_alert = True
 
     question_answers = exam_per_student.STU_answers
+    all_objects = []
+
+    for i in range(len(question)):
+        if Choice.objects.filter(pk=question_answers[i]).count() != 0:
+            temp_ch = Choice.objects.get(pk=question_answers[i])
+            all_objects.append([i + 1, 'گزینه {}'.format(temp_ch.choice_label)])
+        else:
+            all_objects.append([i + 1, 'سفید'])
 
     question, page_range = examination_show(request, question, 'question')
     question_choices, page_range = examination_show(request, question_choices, 'question')
@@ -1322,6 +1330,7 @@ def exam_examing_view(request, exa_id):
         'remaining_time': remaining_time,
         'success_alert': success_alert,
         'has_answered': has_answered,
+        'all_objects': all_objects,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/exam/exam_examing.html', context)
@@ -1357,6 +1366,7 @@ def exam_score_view(request):
     all_kls = g_i_a_v['profile'].klass.all()
     all_exam = Exam.objects.filter(exam_klass=all_kls[0]).order_by('-exam_start')
     all_scores, all_eps = [], []
+
     for i in all_exam:
         if StudentScore.objects.filter(student=g_i_a_v['profile'], exam=i).count() == 0:
             if ExamPerStudent.objects.filter(student=g_i_a_v['profile'], exam=i).count() == 0:
@@ -1467,30 +1477,43 @@ def supervisor_exam_list_for_score_view(request):
 
 
 @login_required
-def supervisor_exam_score_list_view(request, exa_id):
+def supervisor_exam_score_list_view(request, exa_id, message=None):
     g_i_a_v = goes_in_all_view(request)
     output_msg = None
-    exam = Exam.objects.get(pk=exa_id)
-    all_student = Profile.objects.filter(Q(user__is_student=True) & Q(klass=exam.exam_klass))
-    if all_student.count() != 0:
-        for i in all_student:
-            if StudentScore.objects.filter(Q(exam=exam) & Q(student=i)).count() == 0:
-                all_eps = ExamPerStudent.objects.filter(Q(exam=exam) & Q(student=i))
-                if all_eps != 0:
-                    for j in all_eps:
-                        j.calculate_the_score()
-
-    all_score = StudentScore.objects.filter(exam=exam)
-
-    if len(all_score) == 0:
-        all_score = None
-        page_range = None
-        output_msg = {
-            'color': 'danger',
-            'text': 'موردی برای نمایش وجود ندارد!'
-        }
+    if message:
+        return render(request, 'dashboard/exam/exam_score_list.html',
+                      {'page_name': 'نمره', 'g_i_a_v': g_i_a_v, 'output_msg': output_msg, 'message': message,
+                       'exa_id': exa_id, })
     else:
-        all_score, page_range = pagination_show_long(request, all_score, divide_by=6)
+        exam = Exam.objects.get(pk=exa_id)
+        all_student = Profile.objects.filter(Q(user__is_student=True) & Q(klass=exam.exam_klass))
+        if all_student.count() != 0:
+            for i in all_student:
+                if StudentScore.objects.filter(Q(exam=exam) & Q(student=i)).count() == 0:
+                    all_eps = ExamPerStudent.objects.filter(Q(exam=exam) & Q(student=i))
+                    if all_eps != 0:
+                        for j in all_eps:
+                            j.calculate_the_score()
+
+        all_score = StudentScore.objects.filter(exam=exam)
+        temp_now = datetime.now()
+
+        if len(all_score) == 0:
+            all_score = None
+            page_range = None
+            output_msg = {
+                'color': 'danger',
+                'text': 'موردی برای نمایش وجود ندارد!'
+            }
+        elif exam.exam_finish >= temp_now:
+            all_score = None
+            page_range = None
+            output_msg = {
+                'color': 'danger',
+                'text': 'هنوز زمان آزمون به پایان نرسیده است!'
+            }
+        else:
+            all_score, page_range = pagination_show_long(request, all_score, divide_by=6)
 
     context = {
         'page_name': 'نمره',
@@ -1499,6 +1522,7 @@ def supervisor_exam_score_list_view(request, exa_id):
         'all_score': all_score,
         'page_range': page_range,
         'exa_id': exa_id,
+        'message': message,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/exam/exam_score_list.html', context)
@@ -1548,9 +1572,13 @@ def supervisor_exam_score_for_student_list_view(request, exa_id, student):
 
 @login_required
 def supervisor_exam_score_excel_view(request, exa_id):
-    output = io.BytesIO()
-
     exam = Exam.objects.get(pk=exa_id)
+    temp_now = datetime.now()
+
+    if exam.exam_finish >= temp_now:
+        return HttpResponse('هنوز زمان آزمون به اتمام نرسیده است!')
+
+    output = io.BytesIO()
     all_student = Profile.objects.filter(Q(user__is_student=True) & Q(klass=exam.exam_klass))
     if all_student.count() != 0:
         for i in all_student:
@@ -1997,7 +2025,6 @@ def changepass_user_view(request, user_id, name):
         temp_prof = Profile.objects.get(user=temp_user)
         if request.method == 'POST':
             change_pass = ChangePasswordForm(request.POST)
-            print(change_pass.is_valid())
             if change_pass.is_valid():
                 temp_pass = change_pass.cleaned_data['password']
                 temp_pass = make_password(temp_pass)
@@ -2187,9 +2214,13 @@ def extra_exam_checker(request):
 @login_required
 @permission_required(
     ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
-def extra_score_checker(request, aca_id):
-    all_eps = ExamPerStudent.objects.filter(exam__exam_klass__academy_id=aca_id)
-    for i in all_eps:
-        i.re_calculate_the_score()
+def extra_score_checker(request, exa_id):
+    g_i_a_v = goes_in_all_view(request)
+    if g_i_a_v['profile'].user.is_superuser:
+        all_eps = ExamPerStudent.objects.filter(exam_id=exa_id)
+        for i in all_eps:
+            i.re_calculate_the_score()
 
-    return HttpResponse('Done')
+        return supervisor_exam_score_list_view(request, exa_id, message='Done')
+    else:
+        return HttpResponseRedirect(reverse('home_page'))

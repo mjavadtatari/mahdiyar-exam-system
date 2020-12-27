@@ -416,6 +416,9 @@ class ExamPerStudent(models.Model):
         return remain.total_seconds()
 
     def calculate_the_score(self):
+        temp_now = datetime.now()
+        if self.exam.exam_finish >= temp_now:
+            return 'exam_not_finished_yet'
         temp_choices = self.STU_answers
         all_choices = []
         for i in temp_choices:
