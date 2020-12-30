@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group, Permission, AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import ArrayField
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -449,6 +449,11 @@ class ExamPerStudent(models.Model):
             self.calculate_the_score()
         except ObjectDoesNotExist:
             pass
+        except MultipleObjectsReturned:
+            temp_score = StudentScore.objects.filter(student=self.student, exam=self.exam)
+            for i in temp_score:
+                i.delete()
+            self.calculate_the_score()
 
     def save_answer(self, question, answer):
         if answer is None:
