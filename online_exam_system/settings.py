@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'dashboard.apps.DashboardConfig',
+
+    'webmaster_verification',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +92,7 @@ DATABASES = {
         # mystomahdiyar
         # 'PASSWORD': '97714130',
         'PASSWORD': '97714130',
-        # 5JvGm6%y8!a7Nw#yint*O
+        # 5JvGm6%y8!a7Nw#3#yint*O
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -162,4 +164,12 @@ JALALI_DATE_DEFAULTS = {
             ]
         }
     },
+}
+
+WEBMASTER_VERIFICATION = {
+    'bing': '<bing verification code>',
+    'google': 'google9482d79657f8ad2a',
+    'majestic': '<majestic verification code>',
+    'yandex': '<yandex verification code>',
+    'alexa': '<alexa verification code>',
 }
