@@ -11,3 +11,6 @@ Tutorial link form DigitalOcean : [How To Set Up Django with Postgres, Nginx, an
 After making any changes to the codes, Run these two command in Linux Server Terminal:\
 `sudo systemctl daemon-reload`\
 `sudo systemctl restart gunicorn`
+
+Install **Cerbot** on Ubuntu Server and enable **SSL** for **Nginx**:\
+[How To Secure Nginx with Let's Encrypt on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04)
