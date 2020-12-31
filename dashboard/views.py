@@ -1268,11 +1268,14 @@ def exam_list_view(request, wrong_time=None, not_first_time=None, exam_finished=
         }
     else:
         output_msg = None
+
+    all_exam, page_range = pagination_show_long(request, all_exam)
     context = {
         'page_name': 'آزمون',
         'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
-        'all_exam': pagination_show(request, all_exam),
+        'all_exam': all_exam,
+        'page_range': page_range,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/exam/exam_list.html', context)
@@ -1637,12 +1640,13 @@ def exam_list_supervisor_view(request):
             'color': 'danger',
             'text': 'موردی برای نمایش وجود ندارد!'
         }
-    all_out = pagination_show(request, all_out, divide_by=2)
+    all_out, page_range = pagination_show_long(request, all_out, divide_by=2)
     context = {
         'page_name': 'آزمون',
         'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_out': all_out,
+        'page_range': page_range,
         'profile': g_i_a_v['profile'],
     }
     return render(request, 'dashboard/supervisor_dashboard/exam_list.html', context)
