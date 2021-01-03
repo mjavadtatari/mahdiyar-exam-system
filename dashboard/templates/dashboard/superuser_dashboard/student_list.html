@@ -29,7 +29,8 @@
                     <div class="col-sm-5">
                         <form method="post" action="" class="form-inline my-2 my-lg-0 float-lg-left">
                             {% csrf_token %}
-                            <input class="form-control ml-sm-2 btn-sm" type="search" placeholder="نام یا کد ملی را وارد کنید"
+                            <input class="form-control ml-sm-2 btn-sm" type="search"
+                                   placeholder="نام یا کد ملی را وارد کنید"
                                    aria-label="Search" name="search_content">
                             <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">
                                 جستجو
@@ -90,10 +91,12 @@
                                     </table>
                                 </div>
                                 <div class="col-sm my-lg-0 my-2 pt-lg-4">
+                                    <a href="{% url 'dashboard:extra_score_checker_student' stu_id=i.user.pk %}"
+                                       class="btn btn-outline-success btn-sm btn-block">محاسبه مجدد تمامی نمرات</a>
                                     <a href="{% url 'dashboard:changepass_user' name='user' user_id=i.user.pk %}"
-                                       class="btn btn-outline-primary btn-block">تغییر رمز</a>
+                                       class="btn btn-outline-primary btn-sm btn-block">تغییر رمز</a>
                                     <a href="{% url 'dashboard:delete_none_uuid' name='user' obj_id=i.user.pk %}"
-                                       class="btn btn-outline-danger btn-block">حذف کاربر</a>
+                                       class="btn btn-outline-danger btn-sm btn-block">حذف کاربر</a>
                                 </div>
                             </div>
                         </div>

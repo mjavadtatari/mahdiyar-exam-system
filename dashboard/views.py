@@ -2228,3 +2228,31 @@ def extra_score_checker(request, exa_id):
         return supervisor_exam_score_list_view(request, exa_id, message='Done')
     else:
         return HttpResponseRedirect(reverse('home_page'))
+
+
+@login_required
+@permission_required(
+    ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
+def extra_score_checker_student(request, stu_id):
+    g_i_a_v = goes_in_all_view(request)
+    if g_i_a_v['profile'].user.is_superuser:
+        page_tit = 'محاسبه مجدد تمامی نمرات '
+        page_tit += str(Profile.objects.get(user_id=stu_id))
+        all_eps = ExamPerStudent.objects.filter(student__user_id=stu_id)
+        for i in all_eps:
+            i.re_calculate_the_score()
+        output = 'student-recalculate'
+        output_msg = {
+            'color': 'success',
+            'text': 'محاسبه مجدد تمامی نمرات با موفقیت انجام شد'
+        }
+        context = {
+            'g_i_a_v': g_i_a_v,
+            'page_tit': page_tit,
+            'output': output,
+            'output_msg': output_msg,
+            'profile': g_i_a_v['profile'],
+        }
+        return render(request, 'dashboard/superuser_dashboard/messages.html', context)
+    else:
+        return HttpResponseRedirect(reverse('home_page'))

@@ -94,4 +94,5 @@ urlpatterns = [
 
     path('admin/ec/score/', views.extra_exam_checker, name='extra_exam_checker'),
     path('admin/ec/rescore/<uuid:exa_id>/', views.extra_score_checker, name='extra_score_checker'),
+    path('admin/ec/rescore/stu/<int:stu_id>/', views.extra_score_checker_student, name='extra_score_checker_student'),
 ]

@@ -1,0 +1,36 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load static %}
+
+{% block page_title %}
+    {{ page_tit }}
+{% endblock %}
+
+{% block dashboard_heading %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="row">
+                    <div class="col-sm">
+                        <h6 class="my-2 font-weight-bold text-primary d-inline-block">
+                            {{ page_tit }}
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if output == 'student-recalculate' %}
+                    <div class="alert alert-{{ output_msg.color }} text-center" role="alert">
+                        {{ output_msg.text }}
+                    </div>
+                    <a href="{% url 'dashboard:me_view' %}" type="submit" class="btn btn-light btn-block mt-2">
+                        بازگشت به پنل کاربری
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
