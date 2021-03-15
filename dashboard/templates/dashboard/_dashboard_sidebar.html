@@ -17,7 +17,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    {% if g_i_a_v %}
+    {% if profile %}
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
             <a class="nav-link" href="{% url 'dashboard:login' %}">
@@ -42,12 +42,12 @@
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {% if g_i_a_v.profile.user.is_superuser %}
+                        {% if profile.user.is_superuser %}
                             <a class="collapse-item" href="{% url 'dashboard:academy_create' %}">افزودن آموزشگاه</a>
                             <a class="collapse-item" href="{% url 'dashboard:academy_manage' %}">مدیریت آموزشگاه ها</a>
                         {% else %}
                             <a class="collapse-item"
-                               href="{% url 'dashboard:academy_view' aca_id=g_i_a_v.dashboard.academy.pk %}">{{ g_i_a_v.dashboard.academy }}</a>
+                               href="{% url 'dashboard:academy_view' aca_id=profile.academy.pk %}">{{ profile.academy }}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -63,21 +63,19 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingUtilities"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {% if g_i_a_v.profile.user.is_superuser %}
+                        {% if profile.user.is_superuser %}
                             <a class="collapse-item" href="{% url 'dashboard:klass_create' %}">افزودن کلاس</a>
                             <a class="collapse-item" href="{% url 'dashboard:klass_manage' %}">مدیریت کلاس ها</a>
-                        {% elif g_i_a_v.profile.user.is_student %}
+                        {% elif profile.user.is_student %}
                             <a class="collapse-item"
-                               href="{% url 'dashboard:klass_view' kls_id=g_i_a_v.dashboard.klass.pk %}">{{ g_i_a_v.dashboard.klass }}</a>
+                               href="{% url 'dashboard:klass_view' kls_id=profile.klass.pk %}">{{ profile.klass }}</a>
                         {% else %}
-                            {% for i in g_i_a_v.dashboard.klass %}
-                                <a class="collapse-item" href="{% url 'dashboard:klass_view' kls_id=i.pk %}">{{ i }}</a>
-                            {% endfor %}
+                            <a class="collapse-item" href="{% url 'dashboard:klass_manage' %}">لیست کلاس ها</a>
                         {% endif %}
                     </div>
                 </div>
             </li>
-            {% if g_i_a_v.profile.user.is_superuser or g_i_a_v.profile.user.is_supervisior %}
+            {% if profile.user.is_superuser or profile.user.is_supervisior %}
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoo"
@@ -97,7 +95,7 @@
             {% else %}
             {% endif %}
 
-            {% if g_i_a_v.profile.user.is_superuser %}
+            {% if profile.user.is_superuser %}
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThreee"
@@ -117,7 +115,7 @@
             {% else %}
             {% endif %}
 
-            {% if g_i_a_v.profile.user.is_superuser %}
+            {% if profile.user.is_superuser %}
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
@@ -136,7 +134,7 @@
                         </div>
                     </div>
                 </li>
-            {% elif g_i_a_v.profile.user.is_supervisor %}
+            {% elif profile.user.is_supervisor %}
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
@@ -166,8 +164,8 @@
                 اطلاعات آزمون
             </div>
 
-            {% if g_i_a_v.profile.user.is_student %}
-            {% elif g_i_a_v.profile.user.is_supervisor %}
+            {% if profile.user.is_student %}
+            {% elif profile.user.is_supervisor %}
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSeven"
@@ -210,9 +208,9 @@
                 </a>
                 <div id="collapseSix" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {% if g_i_a_v.profile.user.is_supervisor %}
+                        {% if profile.user.is_supervisor %}
                             <a class="collapse-item" href="{% url 'dashboard:exam_list' %}">لیست آزمون ها</a>
-                        {% elif g_i_a_v.profile.user.is_student %}
+                        {% elif profile.user.is_student %}
                             <a class="collapse-item" href="{% url 'dashboard:exam_list' %}">لیست آزمون ها</a>
                         {% else %}
                             <a class="collapse-item" href="{% url 'dashboard:exam_create' %}">افزودن آزمون</a>
@@ -224,7 +222,7 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                {% if g_i_a_v.profile.user.is_student %}
+                {% if profile.user.is_student %}
                     <a class="nav-link" href="{% url 'dashboard:exam_score' %}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>مشاهده نمرات</span></a>
@@ -242,21 +240,21 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                {% if g_i_a_v.profile.user.is_superuser %}
+                {% if profile.user.is_superuser %}
                     <a class="nav-link" href="{% url 'dashboard:academy_create' %}"><i
                             class="fas fa-fw fa-school"></i><span>افزودن آموزشگاه</span></a>
                     <a class="nav-link" href="{% url 'dashboard:academy_manage' %}"><i
                             class="fas fa-fw fa-school"></i><span>مدیریت آموزشگاه ها</span></a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'dashboard:academy_view' aca_id=g_i_a_v.dashboard.academy.pk %}"><i
-                            class="fas fa-fw fa-school"></i><span>{{ g_i_a_v.dashboard.academy }}</span></a>
+                    <a class="nav-link" href="{% url 'dashboard:academy_view' aca_id=dashboard.academy.pk %}"><i
+                            class="fas fa-fw fa-school"></i><span>{{ dashboard.academy }}</span></a>
                 {% endif %}
             </li>
 
             <hr class="mysto-sidebar-divider">
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                {% if g_i_a_v.profile.user.is_superuser %}
+                {% if profile.user.is_superuser %}
                     <a class="nav-link" href="{% url 'dashboard:klass_create' %}">
                         <i class="fas fa-fw fa-user-graduate"></i>
                         <span>افزودن کلاس</span>
@@ -265,13 +263,13 @@
                         <i class="fas fa-fw fa-user-graduate"></i>
                         <span>مدیریت کلاس ها</span>
                     </a>
-                {% elif g_i_a_v.profile.user.is_student %}
-                    <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=g_i_a_v.dashboard.klass.pk %}">
+                {% elif profile.user.is_student %}
+                    <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=dashboard.klass.pk %}">
                         <i class="fas fa-fw fa-user-graduate"></i>
-                        <span>{{ g_i_a_v.dashboard.klass }}</span>
+                        <span>{{ dashboard.klass }}</span>
                     </a>
                 {% else %}
-                    {% for i in g_i_a_v.dashboard.klass %}
+                    {% for i in dashboard.klass %}
                         <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=i.pk %}">
                             <i class="fas fa-fw fa-user-graduate"></i>
                             <span>{{ i }}</span>
@@ -280,7 +278,7 @@
                 {% endif %}
             </li>
 
-            {% if g_i_a_v.profile.user.is_superuser or g_i_a_v.profile.user.is_supervisior %}
+            {% if profile.user.is_superuser or profile.user.is_supervisior %}
                 <hr class="mysto-sidebar-divider">
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
@@ -296,7 +294,7 @@
             {% else %}
             {% endif %}
 
-            {% if g_i_a_v.profile.user.is_superuser %}
+            {% if profile.user.is_superuser %}
                 <hr class="mysto-sidebar-divider">
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
@@ -312,7 +310,7 @@
             {% else %}
             {% endif %}
 
-            {% if g_i_a_v.profile.user.is_superuser %}
+            {% if profile.user.is_superuser %}
                 <hr class="mysto-sidebar-divider">
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
@@ -333,7 +331,7 @@
                         <span>افزودن گروهی دانش آموزان</span>
                     </a>
                 </li>
-            {% elif g_i_a_v.profile.user.is_supervisor %}
+            {% elif profile.user.is_supervisor %}
                 <hr class="mysto-sidebar-divider">
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
@@ -353,8 +351,8 @@
             {% else %}
             {% endif %}
 
-            {% if g_i_a_v.profile.user.is_student %}
-            {% elif g_i_a_v.profile.user.is_supervisor %}
+            {% if profile.user.is_student %}
+            {% elif profile.user.is_supervisor %}
                 <hr class="mysto-sidebar-divider">
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
@@ -382,12 +380,12 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <hr class="mysto-sidebar-divider">
             <li class="nav-item">
-                {% if g_i_a_v.profile.user.is_supervisor %}
+                {% if profile.user.is_supervisor %}
                     <a class="nav-link" href="{% url 'dashboard:exam_list' %}">
                         <i class="fas fa-fw fa-file-alt"></i>
                         <span>لیست آزمون ها</span>
                     </a>
-                {% elif g_i_a_v.profile.user.is_student %}
+                {% elif profile.user.is_student %}
                     <a class="nav-link" href="{% url 'dashboard:exam_list' %}">
                         <i class="fas fa-fw fa-file-alt"></i>
                         <span>لیست آزمون ها</span>
@@ -408,7 +406,7 @@
             <!-- Nav Item - Charts -->
             <hr class="mysto-sidebar-divider">
             <li class="nav-item">
-                {% if g_i_a_v.profile.user.is_student %}
+                {% if profile.user.is_student %}
                     <a class="nav-link" href="{% url 'dashboard:exam_score' %}">
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>مشاهده نمرات</span></a>

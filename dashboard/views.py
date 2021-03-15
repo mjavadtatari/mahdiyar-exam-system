@@ -143,138 +143,138 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('dashboard:login'))
 
 
-def superuser_dashboard(request):
-    temp_user = request.user
-    temp_profile = Profile.objects.get(user=temp_user)
-    temp_student = Profile.objects.filter(user__is_student=True)
-    temp_teacher = Profile.objects.filter(user__is_teacher=True)
-    temp_supervisor = Profile.objects.filter(user__is_supervisor=True)
-    temp_notification = Notification.objects.all().order_by('-date')
-    temp_academy = Academy.objects.all()
-    temp_klass = Klass.objects.all()
-    temp_exam = Exam.objects.all()
-    temp_question = Question.objects.all()
-    temp_score = StudentScore.objects.all()
-    temp_category = Category.objects.all()
-    return {
-        'is_superuser': True,
-        'user': temp_user,
-        'profile': temp_profile,
-        'student': temp_student,
-        'teacher': temp_teacher,
-        'supervisor': temp_supervisor,
-        'notification': temp_notification,
-        'academy': temp_academy,
-        'klass': temp_klass,
-        'exam': temp_exam,
-        'question': temp_question,
-        'score': temp_score,
-        'category': temp_category,
-    }
+# def superuser_dashboard(request):
+#     temp_user = request.user
+#     temp_profile = Profile.objects.get(user=temp_user)
+#     # temp_student = Profile.objects.filter(user__is_student=True)
+#     # temp_teacher = Profile.objects.filter(user__is_teacher=True)
+#     # temp_supervisor = Profile.objects.filter(user__is_supervisor=True)
+#     # temp_notification = Notification.objects.all().order_by('-date')
+#     # temp_academy = Academy.objects.all()
+#     # temp_klass = Klass.objects.all()
+#     # temp_exam = Exam.objects.all()
+#     # temp_question = Question.objects.all()
+#     # temp_score = StudentScore.objects.all()
+#     # temp_category = Category.objects.all()
+#     return {
+#         'is_superuser': True,
+#         'user': temp_user,
+#         'profile': temp_profile,
+#         # 'student': temp_student,
+#         # 'teacher': temp_teacher,
+#         # 'supervisor': temp_supervisor,
+#         # 'notification': temp_notification,
+#         # 'academy': temp_academy,
+#         # 'klass': temp_klass,
+#         # 'exam': temp_exam,
+#         # 'question': temp_question,
+#         # 'score': temp_score,
+#         # 'category': temp_category,
+#     }
+#
+#
+# def supervisor_dashboard(request):
+#     temp_user = request.user
+#     temp_profile = Profile.objects.get(user=temp_user)
+#     temp_supervisor = Profile.objects.get(Q(user=temp_user) & Q(user__is_supervisor=True))
+#     temp_academy = temp_profile.academy
+#     temp_teacher = Profile.objects.filter(Q(user__profile__academy=temp_academy) & Q(user__is_teacher=True))
+#     temp_student = Profile.objects.filter(Q(user__profile__academy=temp_academy) & Q(user__is_student=True))
+#     temp_klass = Klass.objects.filter(academy=temp_academy)
+#     temp_exam = Exam.objects.filter(exam_klass__academy=temp_academy).order_by('-exam_finish')
+#     temp_score = StudentScore.objects.filter(student__user__profile__academy=temp_academy).order_by('-exam')
+#     temp_wallet = Wallet.objects.get(user=temp_user)
+#     temp_transaction = Transaction.objects.filter(wallet__user=temp_user).order_by('-order_time')
+#     temp_question = []
+#     for i in temp_teacher:
+#         x = Question.objects.filter(creator=i)
+#         for j in x:
+#             temp_question.append(j)
+#     return {
+#         'is_supervisor': True,
+#         'user': temp_user,
+#         'profile': temp_profile,
+#         'supervisor': temp_supervisor,
+#         'teacher': temp_teacher,
+#         'student': temp_student,
+#         'academy': temp_academy,
+#         'klass': temp_klass,
+#         'exam': temp_exam,
+#         'score': temp_score,
+#         'question': temp_question,
+#         'wallet': temp_wallet,
+#         'transaction': temp_transaction,
+#     }
+#
+#
+# def teacher_dashboard(request):
+#     temp_user = request.user
+#     temp_profile = Profile.objects.get(user=temp_user)
+#     temp_teacher = Profile.objects.get(Q(user=temp_user) & Q(user__is_teacher=True))
+#     temp_academy = temp_profile.academy
+#     temp_klass = Klass.objects.filter(teacher=temp_profile)
+#     temp_student = Profile.objects.filter(
+#         Q(user__profile__klass__teacher=temp_teacher) & Q(user__is_student=True))
+#     temp_exam = Exam.objects.filter(exam_klass__teacher=temp_teacher)
+#     temp_question = Question.objects.filter(creator=temp_teacher)
+#     temp_score = StudentScore.objects.filter(student__user__profile__klass__teacher=temp_teacher)
+#     temp_wallet = Wallet.objects.get(user=temp_user)
+#     temp_transaction = Transaction.objects.filter(wallet__user=temp_user).order_by('-order_time')
+#     return {
+#         'is_teacher': True,
+#         'user': temp_user,
+#         'profile': temp_profile,
+#         'teacher': temp_teacher,
+#         'student': temp_student,
+#         'academy': temp_academy,
+#         'klass': temp_klass,
+#         'exam': temp_exam,
+#         'question': temp_question,
+#         'score': temp_score,
+#         'wallet': temp_wallet,
+#         'transaction': temp_transaction,
+#     }
+#
+#
+# def student_dashboard(request):
+#     temp_user = request.user
+#     temp_profile = Profile.objects.get(user=temp_user)
+#     temp_student = Profile.objects.get(Q(user=temp_user) & Q(user__is_student=True))
+#     temp_academy = temp_profile.academy
+#     temp_klass = temp_profile.klass.all()
+#     try:
+#         temp_klass = temp_klass[0]
+#     except:
+#         temp_klass = None
+#     temp_exam = Exam.objects.filter(exam_klass=temp_klass)
+#     temp_score = StudentScore.objects.filter(student=temp_student)
+#     return {
+#         'is_student': True,
+#         'user': temp_user,
+#         'profile': temp_profile,
+#         'student': temp_student,
+#         'academy': temp_academy,
+#         'klass': temp_klass,
+#         'exam': temp_exam,
+#         'score': temp_score,
+#     }
 
 
-def supervisor_dashboard(request):
-    temp_user = request.user
-    temp_profile = Profile.objects.get(user=temp_user)
-    temp_supervisor = Profile.objects.get(Q(user=temp_user) & Q(user__is_supervisor=True))
-    temp_academy = temp_profile.academy
-    temp_teacher = Profile.objects.filter(Q(user__profile__academy=temp_academy) & Q(user__is_teacher=True))
-    temp_student = Profile.objects.filter(Q(user__profile__academy=temp_academy) & Q(user__is_student=True))
-    temp_klass = Klass.objects.filter(academy=temp_academy)
-    temp_exam = Exam.objects.filter(exam_klass__academy=temp_academy).order_by('-exam_finish')
-    temp_score = StudentScore.objects.filter(student__user__profile__academy=temp_academy).order_by('-exam')
-    temp_wallet = Wallet.objects.get(user=temp_user)
-    temp_transaction = Transaction.objects.filter(wallet__user=temp_user).order_by('-order_time')
-    temp_question = []
-    for i in temp_teacher:
-        x = Question.objects.filter(creator=i)
-        for j in x:
-            temp_question.append(j)
-    return {
-        'is_supervisor': True,
-        'user': temp_user,
-        'profile': temp_profile,
-        'supervisor': temp_supervisor,
-        'teacher': temp_teacher,
-        'student': temp_student,
-        'academy': temp_academy,
-        'klass': temp_klass,
-        'exam': temp_exam,
-        'score': temp_score,
-        'question': temp_question,
-        'wallet': temp_wallet,
-        'transaction': temp_transaction,
-    }
-
-
-def teacher_dashboard(request):
-    temp_user = request.user
-    temp_profile = Profile.objects.get(user=temp_user)
-    temp_teacher = Profile.objects.get(Q(user=temp_user) & Q(user__is_teacher=True))
-    temp_academy = temp_profile.academy
-    temp_klass = Klass.objects.filter(teacher=temp_profile)
-    temp_student = Profile.objects.filter(
-        Q(user__profile__klass__teacher=temp_teacher) & Q(user__is_student=True))
-    temp_exam = Exam.objects.filter(exam_klass__teacher=temp_teacher)
-    temp_question = Question.objects.filter(creator=temp_teacher)
-    temp_score = StudentScore.objects.filter(student__user__profile__klass__teacher=temp_teacher)
-    temp_wallet = Wallet.objects.get(user=temp_user)
-    temp_transaction = Transaction.objects.filter(wallet__user=temp_user).order_by('-order_time')
-    return {
-        'is_teacher': True,
-        'user': temp_user,
-        'profile': temp_profile,
-        'teacher': temp_teacher,
-        'student': temp_student,
-        'academy': temp_academy,
-        'klass': temp_klass,
-        'exam': temp_exam,
-        'question': temp_question,
-        'score': temp_score,
-        'wallet': temp_wallet,
-        'transaction': temp_transaction,
-    }
-
-
-def student_dashboard(request):
-    temp_user = request.user
-    temp_profile = Profile.objects.get(user=temp_user)
-    temp_student = Profile.objects.get(Q(user=temp_user) & Q(user__is_student=True))
-    temp_academy = temp_profile.academy
-    temp_klass = temp_profile.klass.all()
-    try:
-        temp_klass = temp_klass[0]
-    except:
-        temp_klass = None
-    temp_exam = Exam.objects.filter(exam_klass=temp_klass)
-    temp_score = StudentScore.objects.filter(student=temp_student)
-    return {
-        'is_student': True,
-        'user': temp_user,
-        'profile': temp_profile,
-        'student': temp_student,
-        'academy': temp_academy,
-        'klass': temp_klass,
-        'exam': temp_exam,
-        'score': temp_score,
-    }
-
-
-def goes_in_all_view(request):
-    temp_profile = Profile.objects.get(user=request.user)
-    temp_dashboard = None
-    if temp_profile.user.is_superuser:
-        temp_dashboard = superuser_dashboard(request)
-    elif temp_profile.user.is_supervisor:
-        temp_dashboard = supervisor_dashboard(request)
-    elif temp_profile.user.is_teacher:
-        temp_dashboard = teacher_dashboard(request)
-    elif temp_profile.user.is_student:
-        temp_dashboard = student_dashboard(request)
-    return {
-        'profile': temp_profile,
-        'dashboard': temp_dashboard,
-    }
+# def goes_in_all_view(request):
+#     temp_profile = Profile.objects.get(user=request.user)
+#     temp_dashboard = None
+#     if temp_profile.user.is_superuser:
+#         temp_dashboard = superuser_dashboard(request)
+#     elif temp_profile.user.is_supervisor:
+#         temp_dashboard = supervisor_dashboard(request)
+#     elif temp_profile.user.is_teacher:
+#         temp_dashboard = teacher_dashboard(request)
+#     elif temp_profile.user.is_student:
+#         temp_dashboard = student_dashboard(request)
+#     return {
+#         'profile': temp_profile,
+#         'dashboard': temp_dashboard,
+#     }
 
 
 @login_required
@@ -283,13 +283,13 @@ def me_view(request):
     user_type = profile.user_type_finder()
     jalali = profile.show_birth_date_in_jalali()
     notification = show_notification()
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     context = {
         'profile': profile,
         'user_type': user_type,
         'jalali': jalali,
         'notification': notification,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
     }
     return render(request, 'dashboard/me_page.html', context)
 
@@ -298,7 +298,7 @@ def me_view(request):
 def sign_up_key_view(request):
     profile = request.user.profile
     output_msg, current_key = None, None
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     if request.method == 'POST':
         sign_up_key = SignUpKeyCheckerForm(request.POST)
         if sign_up_key.is_valid():
@@ -329,7 +329,7 @@ def sign_up_key_view(request):
             current_key = SignUpKey.objects.get(klass=temp_kls2[0]).pk
     context = {
         'profile': profile,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'current_key': current_key,
         'sign_up_key': sign_up_key,
@@ -340,7 +340,7 @@ def sign_up_key_view(request):
 @login_required
 def profile_edit_view(request):
     profile = request.user.profile
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     user_object = request.user
     if request.method == 'POST':
         change_profile = ChangeProfileForm(request.POST, request.FILES, instance=profile)
@@ -356,7 +356,7 @@ def profile_edit_view(request):
         'profile': profile,
         'change_profile': change_profile,
         'change_profile_user_model': change_profile_user_model,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
     }
     return render(request, 'dashboard/profile_edit.html', context)
 
@@ -364,7 +364,7 @@ def profile_edit_view(request):
 @login_required
 def password_edit_view(request):
     profile = Profile.objects.get(user=request.user)
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     if request.method == 'POST':
         change_password = CustomPasswordChangeForm(request.user, request.POST)
         if change_password.is_valid():
@@ -379,7 +379,7 @@ def password_edit_view(request):
     context = {
         'profile': profile,
         'change_password': change_password,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
     }
     return render(request, 'dashboard/password_edit.html', context)
 
@@ -394,13 +394,13 @@ def is_user_registered(request):
 def home_page_view(request):
     temp_var = is_user_registered(request)
     notification = show_notification()
-    g_i_a_v = None
-    if temp_var:
-        g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = None
+    # if temp_var:
+    # g_i_a_v = goes_in_all_view(request)
     context = {
         'profile': temp_var,
         'notification': notification,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'home_page_statics': {
             'all_students': Profile.objects.filter(user__is_student=True).count(),
             'all_exams': Exam.objects.all().count(),
@@ -417,7 +417,7 @@ def home_page_view(request):
 @login_required
 @permission_required('dashboard.view_category', raise_exception=True)
 def category_create_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
 
     if request.method == 'POST':
         form = ChangeCategoryForm(request.POST)
@@ -437,10 +437,10 @@ def category_create_view(request):
         output_msg = None
     context = {
         'page_name': 'دسته بندی',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'form': form,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/category/category_create.html', context)
 
@@ -449,8 +449,8 @@ def category_create_view(request):
 @permission_required(['dashboard.view_category', 'dashboard.change_category', 'dashboard.delete_category'],
                      raise_exception=True)
 def category_manage_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_object = g_i_a_v['dashboard']['category']
+    # g_i_a_v = goes_in_all_view(request)
+    all_object = Category.objects.all()
     if all_object.count() == 0:
         output_msg = {
             'color': 'danger',
@@ -461,10 +461,10 @@ def category_manage_view(request):
     all_object = pagination_show(request, all_objects=all_object)
     context = {
         'page_name': 'دسته بندی',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'all_object': all_object,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/superuser_dashboard/category_manage.html', context)
 
@@ -473,7 +473,7 @@ def category_manage_view(request):
 @permission_required(['dashboard.view_category', 'dashboard.change_category', 'dashboard.delete_category'],
                      raise_exception=True)
 def category_change_view(request, cat_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     category = Category.objects.get(pk=cat_id)
     if request.method == 'POST':
         form = ChangeCategoryForm(request.POST, instance=category)
@@ -494,10 +494,10 @@ def category_change_view(request, cat_id):
         output_msg = None
     context = {
         'page_name': 'دسته بندی',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'form': form,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/notification/notification_change.html', context)
 
@@ -506,7 +506,7 @@ def category_change_view(request, cat_id):
 @login_required
 @permission_required('dashboard.view_notification', raise_exception=True)
 def notification_create_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
 
     if request.method == 'POST':
         form = NotificationChangeForm(request.POST, request.FILES)
@@ -526,10 +526,10 @@ def notification_create_view(request):
         output_msg = None
     context = {
         'page_name': 'اطلاعیه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'form': form,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/notification/notification_create.html', context)
 
@@ -538,8 +538,8 @@ def notification_create_view(request):
 @permission_required(['dashboard.view_notification', 'dashboard.change_notification', 'dashboard.delete_notification'],
                      raise_exception=True)
 def notification_manage_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_object = g_i_a_v['dashboard']['notification']
+    # g_i_a_v = goes_in_all_view(request)
+    all_object = Notification.objects.all()
     if all_object.count() == 0:
         output_msg = {
             'color': 'danger',
@@ -550,10 +550,10 @@ def notification_manage_view(request):
     all_object = pagination_show(request, all_objects=all_object)
     context = {
         'page_name': 'اطلاعیه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'all_object': all_object,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/superuser_dashboard/notification_manage.html', context)
 
@@ -562,7 +562,7 @@ def notification_manage_view(request):
 @permission_required(['dashboard.view_notification', 'dashboard.change_notification', 'dashboard.delete_notification'],
                      raise_exception=True)
 def notification_change_view(request, ntf_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     notification = Notification.objects.get(pk=ntf_id)
     if request.method == 'POST':
         form = NotificationChangeForm(request.POST, request.FILES, instance=notification)
@@ -583,10 +583,10 @@ def notification_change_view(request, ntf_id):
         output_msg = None
     context = {
         'page_name': 'اطلاعیه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'form': form,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/notification/notification_change.html', context)
 
@@ -595,7 +595,7 @@ def notification_change_view(request, ntf_id):
 @login_required
 @permission_required('dashboard.add_academy', raise_exception=True)
 def academy_create_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
 
     if request.method == 'POST':
         form = AcademyChangeForm(request.POST)
@@ -621,11 +621,11 @@ def academy_create_view(request):
         output_msg = None
     context = {
         'page_name': 'آموزشگاه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'all_supervisors': all_supervisors,
         'form': form,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/academy/academy_create.html', context)
 
@@ -634,11 +634,12 @@ def academy_create_view(request):
 @permission_required(['dashboard.view_academy', 'dashboard.change_academy', 'dashboard.delete_academy'],
                      raise_exception=True)
 def academy_manage_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_object = g_i_a_v['dashboard']['academy']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    all_object = Academy.objects.all()
     if request.method == 'POST':
         if request.POST.get('search_content'):
-            all_object = g_i_a_v['dashboard']['academy']
+            all_object = Academy.objects.all()
             all_object = all_object.filter(name__contains=request.POST.get('search_content'))
     if all_object.count() == 0:
         output_msg = {
@@ -650,11 +651,11 @@ def academy_manage_view(request):
     all_object, page_range = pagination_template_long(request, all_object, divide_by=6)
     context = {
         'page_name': 'آموزشگاه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'all_object': all_object,
         'output_msg': output_msg,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/academy_manage.html', context)
 
@@ -663,7 +664,7 @@ def academy_manage_view(request):
 @permission_required(['dashboard.view_academy', 'dashboard.change_academy', 'dashboard.delete_academy'],
                      raise_exception=True)
 def academy_change_view(request, aca_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     academy = Academy.objects.get(pk=aca_id)
     manager = Profile.objects.filter(Q(academy=academy) & Q(user__is_supervisor=True))
     if manager.count() == 0:
@@ -694,19 +695,19 @@ def academy_change_view(request, aca_id):
         output_msg = None
     context = {
         'page_name': 'آموزشگاه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'manager': manager,
         'all_supervisors': all_supervisors,
         'form': form,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/academy/academy_change.html', context)
 
 
 @login_required
 def academy_view_view(request, aca_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     academy = get_object_or_404(Academy, pk=aca_id)
     academy_people = Profile.objects.filter(academy=academy)
     academy_teacher = Profile.objects.filter(Q(academy=academy) & Q(user__is_teacher=True))
@@ -717,8 +718,8 @@ def academy_view_view(request, aca_id):
     else:
         manager = manager[0].user.get_full_name()
     context = {
-        'g_i_a_v': g_i_a_v,
-        'profile': g_i_a_v['profile'],
+        # 'g_i_a_v': g_i_a_v,
+        'profile': Profile.objects.get(user=request.user),
         'academy': academy,
         'manager': manager,
         'academy_klass': academy_klass,
@@ -732,7 +733,7 @@ def academy_view_view(request, aca_id):
 @login_required
 @permission_required('dashboard.add_klass', raise_exception=True)
 def klass_create_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
 
     if request.method == 'POST':
         form = KlassChangeForm(request.POST)
@@ -758,10 +759,10 @@ def klass_create_view(request):
         output_msg = None
     context = {
         'page_name': 'کلاس',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'form': form,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/klass/klass_create.html', context)
 
@@ -769,11 +770,15 @@ def klass_create_view(request):
 @login_required
 @permission_required(['dashboard.view_klass', 'dashboard.change_klass', 'dashboard.delete_klass'], raise_exception=True)
 def klass_manage_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_object = g_i_a_v['dashboard']['klass']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_superuser:
+        all_object = Klass.objects.all()
+    else:
+        all_object = Klass.objects.filter(academy=profile.academy)
     if request.method == 'POST':
         if request.POST.get('search_content'):
-            all_object = g_i_a_v['dashboard']['klass']
+            all_object = all_object
             all_object = all_object.filter(Q(name__contains=request.POST.get('search_content')) | Q(
                 academy__name__contains=request.POST.get('search_content')))
     if all_object.count() == 0:
@@ -786,11 +791,11 @@ def klass_manage_view(request):
     all_object, page_range = pagination_template_long(request, all_object, divide_by=6)
     context = {
         'page_name': 'کلاس',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'all_object': all_object,
         'output_msg': output_msg,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/klass_manage.html', context)
 
@@ -798,7 +803,7 @@ def klass_manage_view(request):
 @login_required
 @permission_required(['dashboard.view_klass', 'dashboard.change_klass', 'dashboard.delete_klass'], raise_exception=True)
 def klass_change_view(request, kls_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     klass = Klass.objects.get(pk=kls_id)
     if request.method == 'POST':
         form = KlassChangeForm(request.POST, instance=klass)
@@ -824,17 +829,17 @@ def klass_change_view(request, kls_id):
         output_msg = None
     context = {
         'page_name': 'کلاس',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'form': form,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/klass/klass_change.html', context)
 
 
 @login_required
 def klass_view_view(request, kls_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     klass = get_object_or_404(Klass, pk=kls_id)
     try:
         sign_up_key = SignUpKey.objects.get(klass=klass)
@@ -847,12 +852,12 @@ def klass_view_view(request, kls_id):
     klass_student = Profile.objects.filter(Q(user__profile__klass=klass) & Q(user__is_student=True))
     klass_teacher = Profile.objects.filter(Q(user__profile__klass=klass) & Q(user__is_teacher=True))
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'klass': klass,
         'klass_student': klass_student,
         'klass_teacher': klass_teacher,
         'sign_up_key': sign_up_key,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/klass/klass_dashboard.html', context)
 
@@ -861,14 +866,15 @@ def klass_view_view(request, kls_id):
 @login_required
 @permission_required('dashboard.add_question', raise_exception=True)
 def question_create_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     output_msg, validation_error = None, None
     if request.method == 'POST':
         question = QuestionCreateForm(request.POST, request.FILES)
         ch = ChoiceFormset(request.POST)
         if question.is_valid():
             question.save(commit=False)
-            question.instance.creator = g_i_a_v['profile']
+            question.instance.creator = profile
             t_q = question.save()  # t_q:temporary question
             how_many_true = 0
             if ch.is_valid():
@@ -915,8 +921,8 @@ def question_create_view(request):
         output_msg = validation_error
     context = {
         'page_name': 'سوال',
-        'g_i_a_v': g_i_a_v,
-        'profile': g_i_a_v['profile'],
+        # 'g_i_a_v': g_i_a_v,
+        'profile': profile,
         'question': question,
         'ch': ch,
         'output_msg': output_msg,
@@ -928,8 +934,9 @@ def question_create_view(request):
 @permission_required(['dashboard.view_question', 'dashboard.change_question', 'dashboard.delete_question'],
                      raise_exception=True)
 def question_manage_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    if g_i_a_v['profile'].user.is_superuser or g_i_a_v['profile'].user.is_supervisor:
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_superuser or profile.user.is_supervisor:
         return question_list_supervisor_view(request)
     all_question = Question.objects.filter(creator__user=request.user)
     if all_question.count() == 0:
@@ -941,10 +948,10 @@ def question_manage_view(request):
         output_msg = None
     context = {
         'page_name': 'سوال',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_question': pagination_show(request, all_question),
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/question/question_manage.html', context)
 
@@ -953,7 +960,7 @@ def question_manage_view(request):
 @permission_required(['dashboard.view_question', 'dashboard.change_question', 'dashboard.delete_question'],
                      raise_exception=True)
 def question_change_view(request, qes_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     q_instance = Question.objects.get(pk=qes_id)
     all_choice = Choice.objects.filter(choice_question=q_instance)
     if request.method == 'POST':
@@ -974,12 +981,12 @@ def question_change_view(request, qes_id):
         output_msg = None
     context = {
         'page_name': 'سوال',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_choice': all_choice,
         'q_instance': q_instance,
         'question': question,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/question/question_change.html', context)
 
@@ -988,7 +995,7 @@ def question_change_view(request, qes_id):
 @permission_required(['dashboard.view_question', 'dashboard.change_question', 'dashboard.delete_question'],
                      raise_exception=True)
 def choice_change_view(request, cho_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     c_instance = Choice.objects.get(pk=cho_id)
     if request.method == 'POST':
         choice = ChoiceChangeForm(request.POST, instance=c_instance)
@@ -1017,30 +1024,35 @@ def choice_change_view(request, cho_id):
         output_msg = None
     context = {
         'page_name': 'گزینه',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'choice': choice,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/question/choice_change.html', context)
 
 
 @login_required
 def question_list_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    if g_i_a_v['profile'].user.is_supervisor:
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_supervisor:
         return question_list_supervisor_view(request)
+
     context = {
-        'g_i_a_v': g_i_a_v,
-        'profile': g_i_a_v['profile'],
+        # 'g_i_a_v': g_i_a_v,
+        'profile': profile,
     }
     return render(request, 'dashboard/supervisor_dashboard/question_list.html', context)
 
 
 @login_required
 def question_list_supervisor_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_q = g_i_a_v['dashboard']['question']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    all_q = Question.objects.filter(creator__academy=profile.academy)
+    if profile.user.is_superuser:
+        all_q = Question.objects.all()
     output_msg = None
     all_out = []
     if request.method == 'POST':
@@ -1062,11 +1074,11 @@ def question_list_supervisor_view(request):
     all_out, page_range = pagination_show_long(request, all_out, divide_by=2)
     context = {
         'page_name': 'سوال',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_out': all_out,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/supervisor_dashboard/question_list.html', context)
 
@@ -1085,15 +1097,17 @@ def examination_show(request, all_objects, page_name='page'):
 @login_required
 @permission_required('dashboard.add_exam', raise_exception=True)
 def exam_create_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':
-        exam = ExamCreateForm(request.POST, q_maker=g_i_a_v['profile'])
+        exam = ExamCreateForm(request.POST, q_maker=profile)
         if exam.is_valid():
             exam.save(commit=False)
-            exam.instance.exam_creator = g_i_a_v['profile']
+            exam.instance.exam_creator = profile
             stu_number = Profile.objects.filter(Q(user__is_student=True) & Q(klass=exam.instance.exam_klass)).count()
-            if g_i_a_v['dashboard']['wallet'].balance >= stu_number:
-                g_i_a_v['dashboard']['wallet'].spend(amount=stu_number, description='آزمون: ' + exam.instance.exam_name)
+            temp_wallet = Wallet.objects.get(user=profile.user)
+            if temp_wallet.balance >= stu_number:
+                temp_wallet.spend(amount=stu_number, description='آزمون: ' + exam.instance.exam_name)
                 exam.save()
                 output_msg = {
                     'color': 'success',
@@ -1110,14 +1124,14 @@ def exam_create_view(request):
                 'text': 'متاسفانه ایجاد آزمون با مشکل مواجه شد!'
             }
     else:
-        exam = ExamCreateForm(q_maker=g_i_a_v['profile'])
+        exam = ExamCreateForm(q_maker=profile)
         output_msg = None
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'exam': exam,
         'output_msg': output_msg,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_create.html', context)
 
@@ -1125,10 +1139,11 @@ def exam_create_view(request):
 @login_required
 @permission_required(['dashboard.view_exam', 'dashboard.change_exam', 'dashboard.delete_exam'], raise_exception=True)
 def exam_manage_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_exam = Exam.objects.filter(exam_creator=g_i_a_v['profile']).order_by('-exam_start')
-    if g_i_a_v['profile'].user.is_superuser:
-        all_exam = g_i_a_v['dashboard']['exam'].order_by('-exam_start')
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    all_exam = Exam.objects.filter(exam_creator=profile).order_by('-exam_start')
+    if profile.user.is_superuser:
+        all_exam = Exam.objects.all().order_by('-exam_start')
         output_msg = None
         if all_exam.count() == 0:
             output_msg = {
@@ -1148,11 +1163,11 @@ def exam_manage_view(request):
     all_exam, page_range = pagination_show_long(request, all_exam)
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_exam': all_exam,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_manage.html', context)
 
@@ -1160,10 +1175,11 @@ def exam_manage_view(request):
 @login_required
 @permission_required(['dashboard.view_exam', 'dashboard.change_exam', 'dashboard.delete_exam'], raise_exception=True)
 def exam_change_view(request, exa_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     e_instance = Exam.objects.get(pk=exa_id)
     if request.method == 'POST':
-        exam = ExamChangeForm(request.POST, instance=e_instance, q_maker=g_i_a_v['profile'])
+        exam = ExamChangeForm(request.POST, instance=e_instance, q_maker=profile)
         if exam.is_valid():
             exam.save()
             output_msg = {
@@ -1176,15 +1192,15 @@ def exam_change_view(request, exa_id):
                 'text': 'متاسفانه ویرایش آزمون با مشکل مواجه شد!'
             }
     else:
-        exam = ExamChangeForm(instance=e_instance, q_maker=g_i_a_v['profile'])
+        exam = ExamChangeForm(instance=e_instance, q_maker=profile)
         output_msg = None
     context = {
         'page_name': 'آزمون',
         'exam': exam,
         'e_instance': e_instance,
         'output_msg': output_msg,
-        'g_i_a_v': g_i_a_v,
-        'profile': g_i_a_v['profile'],
+        # 'g_i_a_v': g_i_a_v,
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_change.html', context)
 
@@ -1231,10 +1247,11 @@ def exam_start_view(request, exa_id):
 
 @login_required
 def exam_list_view(request, wrong_time=None, not_first_time=None, exam_finished=None, exam_ended=None):
-    g_i_a_v = goes_in_all_view(request)
-    if g_i_a_v['profile'].user.is_supervisor:
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_supervisor:
         return exam_list_supervisor_view(request)
-    all_kls = g_i_a_v['profile'].klass.all()
+    all_kls = profile.klass.all()
     all_exam = Exam.objects.filter(exam_klass=all_kls[0]).order_by('-exam_start')
     for i in all_exam:
         i.update_exam_status()
@@ -1272,11 +1289,11 @@ def exam_list_view(request, wrong_time=None, not_first_time=None, exam_finished=
     all_exam, page_range = pagination_show_long(request, all_exam)
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_exam': all_exam,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_list.html', context)
 
@@ -1361,26 +1378,27 @@ def exam_end_view(request, exa_id):
 
 @login_required
 def exam_score_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     output_msg = None
-    if g_i_a_v['profile'].user.is_student is False:
+    if profile.user.is_student is False:
         return supervisor_exam_klass_list(request)
 
-    all_kls = g_i_a_v['profile'].klass.all()
+    all_kls = profile.klass.all()
     all_exam = Exam.objects.filter(exam_klass=all_kls[0]).order_by('-exam_start')
     all_scores, all_eps = [], []
 
     for i in all_exam:
-        if StudentScore.objects.filter(student=g_i_a_v['profile'], exam=i).count() == 0:
-            if ExamPerStudent.objects.filter(student=g_i_a_v['profile'], exam=i).count() == 0:
+        if StudentScore.objects.filter(student=profile, exam=i).count() == 0:
+            if ExamPerStudent.objects.filter(student=profile, exam=i).count() == 0:
                 all_eps.append(None)
                 x = None
             else:
-                all_eps.append(ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=i))
-                x = ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=i).calculate_the_score()
+                all_eps.append(ExamPerStudent.objects.get(student=profile, exam=i))
+                x = ExamPerStudent.objects.get(student=profile, exam=i).calculate_the_score()
         else:
-            x = StudentScore.objects.get(student=g_i_a_v['profile'], exam=i)
-            all_eps.append(ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=i))
+            x = StudentScore.objects.get(student=profile, exam=i)
+            all_eps.append(ExamPerStudent.objects.get(student=profile, exam=i))
         all_scores.append(x)
 
     all_out = []
@@ -1400,20 +1418,24 @@ def exam_score_view(request):
     all_out, page_range = pagination_template_long(request, all_out, divide_by=2)
     context = {
         'page_name': 'نمره',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_out': all_out,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_score.html', context)
 
 
 @login_required
 def supervisor_exam_klass_list(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     output_msg = None
-    all_klass = g_i_a_v['dashboard']['klass']
+    if profile.user.is_superuser:
+        all_klass = Klass.objects.all()
+    else:
+        all_klass = Klass.objects.filter(academy=profile.academy)
     if all_klass.count() == 0:
         output_msg = {
             'color': 'danger',
@@ -1422,18 +1444,18 @@ def supervisor_exam_klass_list(request):
     all_klass, page_range = pagination_template_long(request, all_klass, divide_by=6)
     context = {
         'page_name': 'کلاس',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_klass': all_klass,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_score.html', context)
 
 
 @login_required
 def supervisor_exam_klass_list_for_score_view(request, kls_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     output_msg = None
     klass = Klass.objects.get(pk=kls_id)
     all_exam_in_klass = Exam.objects.filter(exam_klass=klass)
@@ -1445,11 +1467,11 @@ def supervisor_exam_klass_list_for_score_view(request, kls_id):
     all_exam_in_klass, page_range = pagination_template_long(request, all_exam_in_klass, divide_by=6)
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_exam_in_klass': all_exam_in_klass,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/exam/exam_list_score.html', context)
 
@@ -1481,11 +1503,11 @@ def supervisor_exam_list_for_score_view(request):
 
 @login_required
 def supervisor_exam_score_list_view(request, exa_id, message=None):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     output_msg = None
     if message:
         return render(request, 'dashboard/exam/exam_score_list.html',
-                      {'page_name': 'نمره', 'g_i_a_v': g_i_a_v, 'output_msg': output_msg, 'message': message,
+                      {'page_name': 'نمره', 'output_msg': output_msg, 'message': message,
                        'exa_id': exa_id, })
     else:
         exam = Exam.objects.get(pk=exa_id)
@@ -1520,20 +1542,20 @@ def supervisor_exam_score_list_view(request, exa_id, message=None):
 
     context = {
         'page_name': 'نمره',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_score': all_score,
         'page_range': page_range,
         'exa_id': exa_id,
         'message': message,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/exam/exam_score_list.html', context)
 
 
 @login_required
 def supervisor_exam_score_for_student_list_view(request, exa_id, student):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     output_msg = None
     exam = Exam.objects.get(pk=exa_id)
     the_student = ExamPerStudent.objects.get(student=student, exam__exam_id=exa_id)
@@ -1564,11 +1586,11 @@ def supervisor_exam_score_for_student_list_view(request, exa_id, student):
 
     context = {
         'page_name': page_name,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_score': all_score,
         'exa_id': exa_id,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/exam/exam_score_per_student.html', context)
 
@@ -1629,9 +1651,10 @@ def supervisor_exam_score_excel_view(request, exa_id):
 
 @login_required
 def exam_list_supervisor_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     output_msg = None
-    all_out = g_i_a_v['dashboard']['exam']
+    all_out = Exam.objects.filter(exam_klass__academy=profile.academy).order_by('-exam_finish')
     for i in all_out:
         i.update_exam_status()
 
@@ -1643,11 +1666,11 @@ def exam_list_supervisor_view(request):
     all_out, page_range = pagination_show_long(request, all_out, divide_by=2)
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_out': all_out,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/supervisor_dashboard/exam_list.html', context)
 
@@ -1655,7 +1678,7 @@ def exam_list_supervisor_view(request):
 # //////////////////////////////////////////// DELETE ////////////////////////////////////////////
 @login_required
 def delete_objects_view(request, name, obj_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     if name.lower() == 'notification':
         temp_obj = Notification.objects.get(pk=obj_id)
         if temp_obj and request.GET.get('status'):
@@ -1741,16 +1764,16 @@ def delete_objects_view(request, name, obj_id):
     # output_msg = None
     context = {
         'output_msg': output_msg,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'temp_obj': temp_obj,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/delete/delete_message.html', context)
 
 
 @login_required
 def delete_uuid_objects_view(request, name, obj_uuid):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     if name.lower() == 'question':
         temp_obj = Question.objects.get(pk=obj_uuid)
         temp_cho = Choice.objects.filter(choice_question_id=obj_uuid)
@@ -1778,9 +1801,9 @@ def delete_uuid_objects_view(request, name, obj_uuid):
         output_msg = None
     context = {
         'output_msg': output_msg,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'temp_obj': temp_obj,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/delete/delete_message.html', context)
 
@@ -1791,12 +1814,15 @@ def delete_uuid_objects_view(request, name, obj_uuid):
     ['dashboard.view_user', 'dashboard.change_user', 'dashboard.delete_user', 'dashboard.delete_category'],
     raise_exception=True)
 def list_supervisor_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_supervisor = g_i_a_v['dashboard']['supervisor']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_superuser:
+        all_supervisor = Profile.objects.filter(user__is_supervisor=True)
+    else:
+        all_supervisor = Question.objects.filter(creator__academy=profile.academy)
     output_msg = None
     if request.method == 'POST':
         if request.POST.get('search_content'):
-            all_supervisor = g_i_a_v['dashboard']['supervisor']
             all_supervisor = all_supervisor.filter(Q(passport_number__exact=request.POST.get('search_content')) | Q(
                 user__first_name__contains=request.POST.get('search_content')) | Q(
                 user__last_name__contains=request.POST.get('search_content')))
@@ -1808,11 +1834,11 @@ def list_supervisor_view(request):
     all_supervisor, page_range = pagination_template_long(request, all_supervisor, divide_by=2)
     context = {
         'page_name': 'سرپرست',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_supervisor': all_supervisor,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/supervisor_list.html', context)
 
@@ -1821,12 +1847,15 @@ def list_supervisor_view(request):
 @permission_required(['dashboard.view_user', 'dashboard.change_user', 'dashboard.delete_user'],
                      raise_exception=True)
 def list_teacher_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_teacher = g_i_a_v['dashboard']['teacher']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_superuser:
+        all_teacher = Profile.objects.filter(user__is_teacher=True)
+    else:
+        all_teacher = Profile.objects.filter(Q(user__is_teacher=True) & Q(academy=profile.academy))
     output_msg = None
     if request.method == 'POST':
         if request.POST.get('search_content'):
-            all_teacher = g_i_a_v['dashboard']['teacher']
             all_teacher = all_teacher.filter(Q(passport_number__exact=request.POST.get('search_content')) | Q(
                 user__first_name__contains=request.POST.get('search_content')) | Q(
                 user__last_name__contains=request.POST.get('search_content')))
@@ -1837,12 +1866,12 @@ def list_teacher_view(request):
         }
     all_teacher, page_range = pagination_template_long(request, all_teacher, divide_by=2)
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'page_name': 'آموزگار',
         'all_teacher': all_teacher,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/teacher_list.html', context)
 
@@ -1851,12 +1880,15 @@ def list_teacher_view(request):
 @permission_required(['dashboard.view_user', 'dashboard.change_user', 'dashboard.delete_user'],
                      raise_exception=True)
 def list_student_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_student = g_i_a_v['dashboard']['student']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_superuser:
+        all_student = Profile.objects.filter(user__is_student=True)
+    else:
+        all_student = Profile.objects.filter(Q(academy=profile.academy) & Q(user__is_student=True))
     output_msg = None
     if request.method == 'POST':
         if request.POST.get('search_content'):
-            all_student = g_i_a_v['dashboard']['student']
             all_student = all_student.filter(Q(passport_number__exact=request.POST.get('search_content')) | Q(
                 user__first_name__contains=request.POST.get('search_content')) | Q(
                 user__last_name__contains=request.POST.get('search_content')))
@@ -1868,11 +1900,11 @@ def list_student_view(request):
     all_student, page_range = pagination_template_long(request, all_student, divide_by=2)
     context = {
         'page_name': 'دانش آموز',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_student': all_student,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/student_list.html', context)
 
@@ -1881,27 +1913,44 @@ def list_student_view(request):
 @permission_required(['dashboard.view_user', 'dashboard.change_user', 'dashboard.delete_user'],
                      raise_exception=True)
 def list_all_view(request, name):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     all_obj = None
     output_msg = None
+    profile = Profile.objects.get(user=request.user)
     if name == 'klass':
         page_name = 'کلاس'
-        all_obj = g_i_a_v['dashboard']['klass']
+        if profile.user.is_superuser:
+            all_obj = Klass.objects.all()
+        else:
+            all_obj = Klass.objects.filter(academy=profile.academy)
     elif name == 'academy':
         page_name = 'آموزشگاه'
-        all_obj = g_i_a_v['dashboard']['academy']
+        if profile.user.is_superuser:
+            all_obj = Academy.objects.all()
     elif name == 'student':
         page_name = 'دانش آموز'
-        all_obj = g_i_a_v['dashboard']['student']
+        if profile.user.is_superuser:
+            all_obj = Profile.objects.filter(user__is_student=True)
+        else:
+            all_obj = Profile.objects.filter(Q(academy=profile.academy) & Q(user__is_student=True))
     elif name == 'teacher':
         page_name = 'آموزگار'
-        all_obj = g_i_a_v['dashboard']['teacher']
+        if profile.user.is_superuser:
+            all_obj = Profile.objects.filter(user__is_teacher=True)
+        else:
+            all_obj = Profile.objects.filter(Q(academy=profile.academy) & Q(user__is_teacher=True))
     elif name == 'supervisor':
         page_name = 'سرپرست'
-        all_obj = g_i_a_v['dashboard']['supervisor']
+        if profile.user.is_superuser:
+            all_obj = Profile.objects.filter(user__is_supervisor=True)
+        else:
+            all_obj = Question.objects.filter(creator__academy=profile.academy)
     elif name == 'question':
         page_name = 'سوال'
-        all_obj = g_i_a_v['dashboard']['question']
+        if profile.user.is_superuser:
+            all_obj = Question.objects.all()
+        else:
+            all_obj = Question.objects.filter(creator__academy=profile.academy)
     else:
         raise Http404()
 
@@ -1915,11 +1964,11 @@ def list_all_view(request, name):
     context = {
         'name': name,
         'page_name': page_name,
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_obj': all_obj,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/all_list.html', context)
 
@@ -1929,8 +1978,9 @@ def list_all_view(request, name):
 @permission_required(['dashboard.view_wallet', 'dashboard.view_transaction', 'dashboard.add_transaction'],
                      raise_exception=True)
 def wallet_increase_view(request, wal_id):
-    g_i_a_v = goes_in_all_view(request)
-    if g_i_a_v['profile'].user.is_supervisor:
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_supervisor:
         return wallet_increase_supervisor_view(request, wal_id)
     temp_wallet = Wallet.objects.get(pk=wal_id)
     if request.method == 'POST':
@@ -1948,11 +1998,11 @@ def wallet_increase_view(request, wal_id):
         temp_amount = WalletIncreaseForm()
         output_msg = None
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'temp_wallet': temp_wallet,
         'output_msg': output_msg,
         'temp_amount': temp_amount,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/wallet/increase.html', context)
 
@@ -1962,8 +2012,8 @@ def wallet_increase_view(request, wal_id):
     ['dashboard.view_transaction', 'dashboard.add_transaction', 'dashboard.view_wallet'],
     raise_exception=True)
 def wallet_transaction_list_view(request):
-    g_i_a_v = goes_in_all_view(request)
-    all_transaction = g_i_a_v['dashboard']['transaction']
+    # g_i_a_v = goes_in_all_view(request)
+    all_transaction = Transaction.objects.filter(wallet__user=request.user).order_by('-order_time')
     output_msg = None
     if all_transaction.count() == 0:
         output_msg = {
@@ -1972,10 +2022,10 @@ def wallet_transaction_list_view(request):
         }
     context = {
         'page_name': 'تراکنش',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_transaction': pagination_show(request, all_transaction, divide_by=7),
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/wallet/transaction_list.html', context)
 
@@ -1985,8 +2035,9 @@ def wallet_transaction_list_view(request):
     ['dashboard.view_transaction', 'dashboard.add_transaction', 'dashboard.view_wallet'],
     raise_exception=True)
 def wallet_increase_supervisor_view(request, wal_id):
-    g_i_a_v = goes_in_all_view(request)
-    self_wallet = g_i_a_v['dashboard']['wallet']
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    self_wallet = Wallet.objects.get(user=profile.user)
     teacher_wallet = Wallet.objects.get(pk=wal_id)
     if request.method == 'POST':
         temp_amount = WalletIncreaseForm(request.POST)
@@ -2007,22 +2058,22 @@ def wallet_increase_supervisor_view(request, wal_id):
         temp_amount = WalletIncreaseForm()
         output_msg = None
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'temp_wallet': teacher_wallet,
         'self_wallet': self_wallet,
         'output_msg': output_msg,
         'temp_amount': temp_amount,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/wallet/increase.html', context)
 
 
 @login_required
 @permission_required(
-    ['dashboard.delete_category', 'dashboard.delete_notification'],
+    ['dashboard.delete_user'],
     raise_exception=True)
 def changepass_user_view(request, user_id, name):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     output_msg, change_pass, temp_prof = None, None, None
     if name == 'user':
         temp_user = User.objects.get(pk=user_id)
@@ -2050,11 +2101,11 @@ def changepass_user_view(request, user_id, name):
             'text': 'درخواست صحیح نمیباشد!',
         }
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'change_pass': change_pass,
         'temp_prof': temp_prof,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/delete/changepass_message.html', context)
 
@@ -2064,7 +2115,7 @@ def changepass_user_view(request, user_id, name):
 @permission_required(
     ['dashboard.delete_notification'], raise_exception=True)
 def copy_object_view(request, name):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     errors, output_msg, all_obj, page_name = None, None, None, None
     if name == 'exam':
         page_name = 'آزمون'
@@ -2095,13 +2146,13 @@ def copy_object_view(request, name):
     else:
         pass
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'page_name': page_name,
         'all_obj': all_obj,
         'name': name,
         'output_msg': output_msg,
         'errors': errors,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/superuser_dashboard/copy_object.html', context)
 
@@ -2111,10 +2162,11 @@ def copy_object_view(request, name):
 @permission_required(
     ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
 def import_choose_view(request):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     output_msg, klass, academy = None, None, None
-    if g_i_a_v['dashboard']['user'].is_supervisor:
-        return redirect('dashboard:import_student', aca_id=g_i_a_v['dashboard']['academy'].pk)
+    if profile.user.is_supervisor:
+        return redirect('dashboard:import_student', aca_id=profile.academy.pk)
     elif request.method == 'POST':
         academy = AcademyFinderForm(request.POST)
         if academy.is_valid():
@@ -2123,11 +2175,11 @@ def import_choose_view(request):
     else:
         academy = AcademyFinderForm()
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'academy': academy,
         'klass': klass,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/superuser_dashboard/import_choose.html', context)
 
@@ -2136,7 +2188,7 @@ def import_choose_view(request):
 @permission_required(
     ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
 def import_student_view(request, aca_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
     academy = Academy.objects.get(pk=aca_id)
     output_msg, errors = None, []
     if request.method == 'POST':
@@ -2182,11 +2234,11 @@ def import_student_view(request, aca_id):
     else:
         klass = ImportStudentForm(academy=academy)
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'errors': errors,
         'klass': klass,
-        'profile': g_i_a_v['profile'],
+        'profile': Profile.objects.get(user=request.user),
     }
     return render(request, 'dashboard/superuser_dashboard/import_student.html', context)
 
@@ -2219,8 +2271,8 @@ def extra_exam_checker(request):
 @permission_required(
     ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
 def extra_score_checker(request, exa_id):
-    g_i_a_v = goes_in_all_view(request)
-    if g_i_a_v['profile'].user.is_superuser:
+    # g_i_a_v = goes_in_all_view(request)
+    if request.user.is_superuser:
         all_eps = ExamPerStudent.objects.filter(exam_id=exa_id)
         for i in all_eps:
             i.re_calculate_the_score()
@@ -2234,8 +2286,9 @@ def extra_score_checker(request, exa_id):
 @permission_required(
     ['dashboard.view_user', 'dashboard.delete_user'], raise_exception=True)
 def extra_score_checker_student(request, stu_id):
-    g_i_a_v = goes_in_all_view(request)
-    if g_i_a_v['profile'].user.is_superuser:
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
+    if profile.user.is_superuser:
         page_tit = 'محاسبه مجدد تمامی نمرات '
         page_tit += str(Profile.objects.get(user_id=stu_id))
         all_eps = ExamPerStudent.objects.filter(student__user_id=stu_id)
@@ -2247,11 +2300,11 @@ def extra_score_checker_student(request, stu_id):
             'text': 'محاسبه مجدد تمامی نمرات با موفقیت انجام شد'
         }
         context = {
-            'g_i_a_v': g_i_a_v,
+            # 'g_i_a_v': g_i_a_v,
             'page_tit': page_tit,
             'output': output,
             'output_msg': output_msg,
-            'profile': g_i_a_v['profile'],
+            'profile': profile,
         }
         return render(request, 'dashboard/superuser_dashboard/messages.html', context)
     else:

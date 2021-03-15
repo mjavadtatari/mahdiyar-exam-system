@@ -91,8 +91,10 @@
                                     </table>
                                 </div>
                                 <div class="col-sm my-lg-0 my-2 pt-lg-4">
-                                    <a href="{% url 'dashboard:extra_score_checker_student' stu_id=i.user.pk %}"
-                                       class="btn btn-outline-success btn-sm btn-block">محاسبه مجدد تمامی نمرات</a>
+                                    {% if profile.user.is_superuser %}
+                                        <a href="{% url 'dashboard:extra_score_checker_student' stu_id=i.user.pk %}"
+                                           class="btn btn-outline-success btn-sm btn-block">محاسبه مجدد تمامی نمرات</a>
+                                    {% endif %}
                                     <a href="{% url 'dashboard:changepass_user' name='user' user_id=i.user.pk %}"
                                        class="btn btn-outline-primary btn-sm btn-block">تغییر رمز</a>
                                     <a href="{% url 'dashboard:delete_none_uuid' name='user' obj_id=i.user.pk %}"

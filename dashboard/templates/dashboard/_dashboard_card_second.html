@@ -9,7 +9,7 @@
         {% endfor %}
 
     </div>
-    {% if g_i_a_v.profile.user.is_superuser %}
+    {% if profile.user.is_superuser %}
         <a href="{% url 'dashboard:notification_manage' %}" type="button" class="btn btn-info btn-block">مدیریت اطلاعیه ها</a>
     {% endif %}
 </div>
