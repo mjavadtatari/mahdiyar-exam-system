@@ -1207,35 +1207,37 @@ def exam_change_view(request, exa_id):
 
 @login_required
 def exam_info_view(request, exa_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     exam = Exam.objects.get(pk=exa_id)
     resume_exam = False
 
-    if not is_first_time(exam=exam, student=g_i_a_v['profile']):
+    if not is_first_time(exam=exam, student=profile):
         if is_exam_time(exam) == 0:
-            exam_per_student = ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=exam)
+            exam_per_student = ExamPerStudent.objects.get(student=profile, exam=exam)
             exam_per_student.update_remain_time()
-            if exam_per_student.STU_remain_time != 0:
+            if exam_per_student.STU_remain_time.total_seconds() != 0:
                 resume_exam = 'during'
             else:
                 resume_exam = 'submited'
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'exam': exam,
         'resume_exam': resume_exam,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_info.html', context)
 
 
 @login_required
 def exam_start_view(request, exa_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     exam = Exam.objects.get(pk=exa_id)
-    if is_first_time(exam=exam, student=g_i_a_v['profile']):
+    if is_first_time(exam=exam, student=profile):
         if is_start_time(exam=exam):
-            exam_per_student = create_exam_per_student(exam=exam, student=g_i_a_v['profile'])
+            exam_per_student = create_exam_per_student(exam=exam, student=profile)
             exam_per_student.STU_start = datetime.now()
             exam_per_student.calculate_finish_date_time()
             return redirect('dashboard:exam_examing', exa_id=exa_id)
@@ -1300,9 +1302,10 @@ def exam_list_view(request, wrong_time=None, not_first_time=None, exam_finished=
 
 @login_required
 def exam_examing_view(request, exa_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     exam = Exam.objects.get(pk=exa_id)
-    exam_per_student = ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=exam)
+    exam_per_student = ExamPerStudent.objects.get(student=profile, exam=exam)
     temp_q = exam_per_student.STU_questions
     question = []
     question_choices = []
@@ -1342,7 +1345,7 @@ def exam_examing_view(request, exa_id):
     if remaining_time == -1:
         return exam_list_view(request, exam_finished=True)
     context = {
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'exam': exam,
         'question': question,
         'page_range': page_range,
@@ -1351,16 +1354,17 @@ def exam_examing_view(request, exa_id):
         'success_alert': success_alert,
         'has_answered': has_answered,
         'all_objects': all_objects,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_examing.html', context)
 
 
 @login_required
 def exam_end_view(request, exa_id):
-    g_i_a_v = goes_in_all_view(request)
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     exam = Exam.objects.get(pk=exa_id)
-    exam_per_student = ExamPerStudent.objects.get(student=g_i_a_v['profile'], exam=exam)
+    exam_per_student = ExamPerStudent.objects.get(student=profile, exam=exam)
     remaining_time = exam_per_student.update_remain_time()
     if request.POST.get('endit'):
         exam_per_student.STU_remain_time = 0
@@ -1368,10 +1372,10 @@ def exam_end_view(request, exa_id):
         return exam_list_view(request, exam_ended=True)
     context = {
         'page_name': 'آزمون',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'remaining_time': remaining_time,
         'exam': exam,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_end.html', context)
 
@@ -1477,10 +1481,11 @@ def supervisor_exam_klass_list_for_score_view(request, kls_id):
 
 
 @login_required
-def supervisor_exam_list_for_score_view(request):
-    g_i_a_v = goes_in_all_view(request)
+def supervisor_exam_list_for_score_view(request, exa_id):
+    # g_i_a_v = goes_in_all_view(request)
+    profile = Profile.objects.get(user=request.user)
     output_msg = None
-    all_exam = g_i_a_v['dashboard']['exam']
+    all_exam = Exam.objects.filter(exam_klass__academy=profile.academy)
     for i in all_exam:
         i.update_exam_status()
 
@@ -1492,11 +1497,11 @@ def supervisor_exam_list_for_score_view(request):
         }
     context = {
         'page_name': 'نمره',
-        'g_i_a_v': g_i_a_v,
+        # 'g_i_a_v': g_i_a_v,
         'output_msg': output_msg,
         'all_exam': all_exam,
         'page_range': page_range,
-        'profile': g_i_a_v['profile'],
+        'profile': profile,
     }
     return render(request, 'dashboard/exam/exam_list_score.html', context)
 

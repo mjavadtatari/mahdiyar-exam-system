@@ -56,10 +56,9 @@
                                     شرکت در آزمون
                                 </a>
                             {% else %}
-                                {#                                <a href="{% url 'dashboard:exam_start' exa_id=i.pk %}"#}
-                                {#                                   class="btn btn-outline-primary btn-sm float-left">#}
-                                {#                                    مشاهده نتایج#}
-                                {#                                </a>#}
+                                <button class="btn btn-outline-danger btn-sm float-left" disabled>
+                                    زمان پایان یافته!
+                                </button >
                             {% endif %}
                         </div>
                     {% endfor %}

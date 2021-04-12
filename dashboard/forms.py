@@ -234,7 +234,12 @@ class ExamCreateForm(forms.ModelForm):
         self.fields['exam_start'] = SplitJalaliDateTimeField(label="شروع آزمون", widget=AdminSplitJalaliDateTime)
         self.fields['exam_finish'] = SplitJalaliDateTimeField(label="پایان آزمون", widget=AdminSplitJalaliDateTime)
         self.fields['exam_question'].queryset = Question.objects.filter(creator=self.q_maker)
-        self.fields['exam_klass'].queryset = Klass.objects.filter(teacher=self.q_maker)
+        if self.q_maker.user.is_supervisor:
+            self.fields['exam_question'].queryset = Question.objects.filter(creator__academy=self.q_maker.academy)
+            self.fields['exam_klass'].queryset = Klass.objects.filter(academy=self.q_maker.academy)
+        else:
+            self.fields['exam_question'].queryset = Question.objects.filter(creator=self.q_maker)
+            self.fields['exam_klass'].queryset = Klass.objects.filter(teacher=self.q_maker)
 
 
 class ExamChangeForm(forms.ModelForm):
@@ -378,9 +383,8 @@ class CopyObjectForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(CopyObjectForm, self).__init__(*args, **kwargs)
         self.fields['exam'] = forms.ModelChoiceField(label='از آزمون',
-                                                      widget=forms.Select(attrs={'class': 'form-control'}),
-                                                      queryset=Exam.objects.all())
-        self.fields['klass'] = forms.ModelChoiceField(label='برای کلاس',
                                                      widget=forms.Select(attrs={'class': 'form-control'}),
-                                                     queryset=Klass.objects.all())
-
+                                                     queryset=Exam.objects.all())
+        self.fields['klass'] = forms.ModelChoiceField(label='برای کلاس',
+                                                      widget=forms.Select(attrs={'class': 'form-control'}),
+                                                      queryset=Klass.objects.all())

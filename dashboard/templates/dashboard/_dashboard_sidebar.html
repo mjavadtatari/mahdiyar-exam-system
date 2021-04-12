@@ -67,8 +67,10 @@
                             <a class="collapse-item" href="{% url 'dashboard:klass_create' %}">افزودن کلاس</a>
                             <a class="collapse-item" href="{% url 'dashboard:klass_manage' %}">مدیریت کلاس ها</a>
                         {% elif profile.user.is_student %}
-                            <a class="collapse-item"
-                               href="{% url 'dashboard:klass_view' kls_id=profile.klass.pk %}">{{ profile.klass }}</a>
+                            {% for i in profile.klass.all %}
+                                <a class="collapse-item"
+                                   href="{% url 'dashboard:klass_view' kls_id=i.pk %}">{{ i }}</a>
+                            {% endfor %}
                         {% else %}
                             <a class="collapse-item" href="{% url 'dashboard:klass_manage' %}">لیست کلاس ها</a>
                         {% endif %}
@@ -209,6 +211,7 @@
                 <div id="collapseSix" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {% if profile.user.is_supervisor %}
+                            <a class="collapse-item" href="{% url 'dashboard:exam_create' %}">افزودن آزمون</a>
                             <a class="collapse-item" href="{% url 'dashboard:exam_list' %}">لیست آزمون ها</a>
                         {% elif profile.user.is_student %}
                             <a class="collapse-item" href="{% url 'dashboard:exam_list' %}">لیست آزمون ها</a>

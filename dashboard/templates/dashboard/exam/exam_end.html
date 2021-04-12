@@ -22,7 +22,7 @@
                 <div class="alert alert-dark text-center" role="alert">
                     زمان باقی مانده برای شما:
                     <span class="btn btn-warning text-dark btn-icon-split mb-2 mt-lg-0 mt-3" style="height: 45px">
-                        <p id="timer" class="text pt-2" style="width: 230px;"></p>
+                        <p id="timer" class="text pt-2" style="width: 240px;"></p>
                             <span class="icon text-white-50">
                           <i class="fas fa-clock mt-2"></i>
                         </span>
@@ -66,9 +66,16 @@
             var hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
             var minutes = Math.floor((count % (60 * 60)) / (60));
             var seconds = Math.floor((count % (60)));
+            var days_temp = "";
 
-            document.getElementById("timer").innerHTML = hours + " ساعت "
+            if (count >= 86400) {
+                var days = Math.floor((count % (60 * 60 * 24 * 30) / (60 * 60 * 24)));
+                days_temp = days + " روز ";
+            }
+
+            document.getElementById("timer").innerHTML = days_temp +  hours + " ساعت "
                 + minutes + " دقیقه " + seconds + " ثانیه ";
+
 
             if (count <= 0) {
                 clearInterval(interval);

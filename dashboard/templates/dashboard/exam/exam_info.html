@@ -45,14 +45,6 @@
                     </tr>
                     <tr>
                         <th class="d-sm-block d-none" scope="row">
-                            <i class="fas fa-school ml-2"></i>
-                            آموزشگاه :
-                        </th>
-                        <td>
-                            {{ exam.exam_klass.academy.name }}</td>
-                    </tr>
-                    <tr>
-                        <th class="d-sm-block d-none" scope="row">
                             <i class="fas fa-hourglass-start ml-2"></i>
                             زمان فعال شدن آزمون :
                         </th>
@@ -78,6 +70,13 @@
                             تعداد سوالات :
                         </th>
                         <td>{{ exam.exam_question.count }}</td>
+                    </tr>
+                    <tr>
+                        <th class="d-sm-block d-none" scope="row">
+                            <i class="fas fa-hashtag ml-2"></i>
+                            توضیحات :
+                        </th>
+                        <td>{{ exam.exam_guide }}</td>
                     </tr>
                     </tbody>
                 </table>
