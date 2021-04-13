@@ -21,14 +21,16 @@
                             {{ page_name }}
                             ها
                         </h6>
-                        <a href="{% url 'dashboard:klass_create' %}" class="badge badge-pill badge-success">
-                            ساخت
-                            {{ page_name }}
-                            جدید
-                        </a>
-                        <a href="{% url 'dashboard:list_all' name='klass' %}" class="badge badge-pill badge-info">
-                            لیست کامل
-                        </a>
+                        {% if profile.user.is_supervisor or profile.user.is_superuser %}
+                            <a href="{% url 'dashboard:klass_create' %}" class="badge badge-pill badge-success">
+                                ساخت
+                                {{ page_name }}
+                                جدید
+                            </a>
+                            <a href="{% url 'dashboard:list_all' name='klass' %}" class="badge badge-pill badge-info">
+                                لیست کامل
+                            </a>
+                        {% endif %}
                     </div>
                     <div class="col-sm-5">
                         <form method="post" action="" class="form-inline my-2 my-lg-0 float-lg-left">
@@ -85,18 +87,20 @@
                                         {{ i }}
                                     </span>
                                 </div>
-                                <div class="col-sm-2 my-lg-0 my-2">
-                                    <a href="{% url 'dashboard:klass_change' kls_id=i.pk %}"
-                                       class="btn btn-outline-primary btn-sm btn-block">
-                                        ویرایش
-                                    </a>
-                                </div>
-                                <div class="col-sm-2 my-lg-0 my-2">
-                                    <a href="{% url 'dashboard:delete_none_uuid' name='klass' obj_id=i.pk %}"
-                                       class="btn btn-outline-danger btn-sm btn-block">
-                                        حذف
-                                    </a>
-                                </div>
+                                {% if profile.user.is_supervisor or profile.user.is_superuser %}
+                                    <div class="col-sm-2 my-lg-0 my-2">
+                                        <a href="{% url 'dashboard:klass_change' kls_id=i.pk %}"
+                                           class="btn btn-outline-primary btn-sm btn-block">
+                                            ویرایش
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-2 my-lg-0 my-2">
+                                        <a href="{% url 'dashboard:delete_none_uuid' name='klass' obj_id=i.pk %}"
+                                           class="btn btn-outline-danger btn-sm btn-block">
+                                            حذف
+                                        </a>
+                                    </div>
+                                {% endif %}
                                 <div class="col-sm-3 my-lg-0 my-2">
                                     <a href="{% url 'dashboard:klass_view' kls_id=i.pk %}"
                                        class="btn btn-outline-dark btn-sm btn-block">

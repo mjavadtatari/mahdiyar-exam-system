@@ -768,7 +768,7 @@ def klass_create_view(request):
 
 
 @login_required
-@permission_required(['dashboard.view_klass', 'dashboard.change_klass', 'dashboard.delete_klass'], raise_exception=True)
+@permission_required(['dashboard.add_question'], raise_exception=True)
 def klass_manage_view(request):
     # g_i_a_v = goes_in_all_view(request)
     profile = Profile.objects.get(user=request.user)
