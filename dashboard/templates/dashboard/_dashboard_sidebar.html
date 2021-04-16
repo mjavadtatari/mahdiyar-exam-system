@@ -249,8 +249,8 @@
                     <a class="nav-link" href="{% url 'dashboard:academy_manage' %}"><i
                             class="fas fa-fw fa-school"></i><span>مدیریت آموزشگاه ها</span></a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'dashboard:academy_view' aca_id=dashboard.academy.pk %}"><i
-                            class="fas fa-fw fa-school"></i><span>{{ dashboard.academy }}</span></a>
+                    <a class="nav-link" href="{% url 'dashboard:academy_view' aca_id=profile.academy.pk %}"><i
+                            class="fas fa-fw fa-school"></i><span>{{ profile.academy }}</span></a>
                 {% endif %}
             </li>
 
@@ -267,10 +267,12 @@
                         <span>مدیریت کلاس ها</span>
                     </a>
                 {% elif profile.user.is_student %}
-                    <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=dashboard.klass.pk %}">
-                        <i class="fas fa-fw fa-user-graduate"></i>
-                        <span>{{ dashboard.klass }}</span>
-                    </a>
+                    {% for klass in profile.klass.all %}
+                        <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=klass.pk %}">
+                            <i class="fas fa-fw fa-user-graduate"></i>
+                            <span>{{ klass }}</span>
+                        </a>
+                    {% endfor %}
                 {% else %}
                     {% for i in dashboard.klass %}
                         <a class="nav-link" href="{% url 'dashboard:klass_view' kls_id=i.pk %}">
@@ -344,7 +346,7 @@
                     </a>
                     <a class="nav-link" href="{% url 'dashboard:list_student' %}">
                         <i class="fas fa-fw fa-user"></i>
-                        <span>>دانش آموز ها</span>
+                        <span>دانش آموز ها</span>
                     </a>
                     <a class="nav-link" href="{% url 'dashboard:import_choose' %}">
                         <i class="fas fa-fw fa-user"></i>
