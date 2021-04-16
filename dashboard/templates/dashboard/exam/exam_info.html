@@ -62,7 +62,19 @@
                             <i class="fas fa-stopwatch ml-2"></i>
                             مدت زمان پاسخ گویی :
                         </th>
-                        <td>{{ exam.exam_duration }}</td>
+                        <td>
+                            {% if exam.exam_delayer %}
+                                <del>{{ exam.exam_duration }}</del>
+                                <p class="d-inline text-danger">{{ exam.exam_duration_for_delayers }}</p>
+                                <br/>
+                                <p class="text-danger"><small>
+                                    به علت تاخیر در ورود به جلسه آزمون، زمان پاسخگویی شما از لحظه ورود تا پایان آزمون
+                                    خواهد بود.
+                                </small></p>
+                            {% else %}
+                                {{ exam.exam_duration }}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <th class="d-sm-block d-none" scope="row">

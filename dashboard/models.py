@@ -365,6 +365,15 @@ class Exam(models.Model):
             self.is_active = False
         self.save()
 
+    def exam_delayer(self):
+        if (self.exam_finish - datetime.now()) < self.exam_duration:
+            return True
+
+    def exam_duration_for_delayers(self):
+        temp_remain_time = self.exam_finish - datetime.now()
+        temp_remain_time = int(temp_remain_time.total_seconds())
+        return time.strftime('%H:%M:%S', time.gmtime(temp_remain_time))
+
 
 class ExamPerStudent(models.Model):
     """
@@ -395,6 +404,9 @@ class ExamPerStudent(models.Model):
     def calculate_finish_date_time(self):
         self.STU_finish = self.STU_start + self.exam.exam_duration
         self.STU_remain_time = self.exam.exam_duration
+        if self.STU_finish > self.exam.exam_finish:
+            self.STU_finish = self.exam.exam_finish
+            self.STU_remain_time = self.exam.exam_finish - datetime.now()
         self.save()
 
     def update_remain_time(self, entry=None):
