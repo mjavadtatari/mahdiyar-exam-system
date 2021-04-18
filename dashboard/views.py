@@ -1620,7 +1620,10 @@ def supervisor_exam_score_excel_view(request, exa_id):
 
     all_score = StudentScore.objects.filter(exam=exam)
     all_absent = list(i for i in Profile.objects.filter(klass=exam.exam_klass))
-    all_present = list(i for i in StudentScore.objects.filter(exam=exam))
+    temp_list = list(i for i in StudentScore.objects.filter(exam=exam))
+    all_present = []
+    for i in temp_list:
+        all_present.append(i.student)
     temp_list = []
 
     for i in all_absent:
