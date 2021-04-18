@@ -1619,26 +1619,90 @@ def supervisor_exam_score_excel_view(request, exa_id):
                         j.calculate_the_score()
 
     all_score = StudentScore.objects.filter(exam=exam)
+    all_absent = list(i for i in Profile.objects.filter(klass=exam.exam_klass))
+    all_present = list(i for i in StudentScore.objects.filter(exam=exam))
+    temp_list = []
+
+    for i in all_absent:
+        if i not in all_present:
+            temp_list.append(i)
+
+    all_absent = temp_list
 
     workbook = xlsxwriter.Workbook(output)
     worksheet = workbook.add_worksheet()
 
-    center = workbook.add_format({'align': 'center'})
+    title_text = 'نمرات آزمون {} - کلاس {} - آموزشگاه {}'.format(exam.exam_name, exam.exam_klass.name,
+                                                                 exam.exam_klass.academy.name)
 
     worksheet.set_column('A:A', 30)
     worksheet.set_column('B:B', 12)
+    worksheet.set_row(0, 30)
+    worksheet.set_row(1, 20)
+    worksheet.set_row(2, 20)
+    worksheet.set_row(len(all_score) + 4, 20)
+    worksheet.right_to_left()
+
+    # Create Title for Excel file.
+    title_format = workbook.add_format({
+        'bold': 1,
+        # 'border': 1,
+        'align': 'center',
+        'valign': 'vcenter',
+        'fg_color': 'yellow'})
+
+    present_format = workbook.add_format({
+        # 'border': 1,
+        'align': 'center',
+        'valign': 'vcenter',
+        'color': 'white',
+        'fg_color': 'green'})
+
+    absent_format = workbook.add_format({
+        # 'border': 1,
+        'align': 'center',
+        'valign': 'vcenter',
+        'color': 'white',
+        'fg_color': 'red'})
+
+    eye_care_format = workbook.add_format({
+        'align': 'center',
+        'valign': 'vcenter',
+        'fg_color': '#dfe4ea'})
+
+    normal_format = workbook.add_format({
+        'align': 'center',
+        'valign': 'vcenter'})
+
+    # Merge 5 cells.
+    worksheet.merge_range('A1:E1', title_text, title_format)
+    worksheet.merge_range('A2:E2', 'دانش آموزان حاضر در آزمون', present_format)
+    worksheet.merge_range('A' + str(len(all_score) + 5) + ':' + 'E' + str(len(all_score) + 5), 'دانش آموزان غایب',
+                          absent_format)
 
     temp_list = ['نام و نام خانوادگی', 'کد ملی', 'کل پاسخ ها', 'نمره', 'درصد']
 
     for i in range(5):
-        worksheet.write(0, i, temp_list[i], center)
+        worksheet.write(2, i, temp_list[i], normal_format)
+        if i < 2:
+            worksheet.write(len(all_score) + 5, i, temp_list[i], normal_format)
 
     for i in range(len(all_score)):
-        worksheet.write(i + 1, 0, all_score[i].student.user.get_full_name(), center)
-        worksheet.write(i + 1, 1, all_score[i].student.passport_number, center)
-        worksheet.write(i + 1, 2, all_score[i].all_questions, center)
-        worksheet.write(i + 1, 3, all_score[i].score, center)
-        worksheet.write(i + 1, 4, all_score[i].percentage, center)
+        cell_format = normal_format if i % 2 == 0 else eye_care_format
+
+        j = i + 3
+        worksheet.write(j, 0, all_score[i].student.user.get_full_name(), cell_format)
+        worksheet.write(j, 1, all_score[i].student.passport_number, cell_format)
+        worksheet.write(j, 2, all_score[i].all_questions, cell_format)
+        worksheet.write(j, 3, all_score[i].score, cell_format)
+        worksheet.write(j, 4, all_score[i].percentage, cell_format)
+
+    for i in range(len(all_absent)):
+        cell_format = normal_format if i % 2 == 0 else eye_care_format
+
+        j = i + len(all_score) + 5
+        worksheet.write(j, 0, all_absent[i].user.get_full_name(), cell_format)
+        worksheet.write(j, 1, all_absent[i].passport_number, cell_format)
 
     # Close the workbook before sending the data.
     workbook.close()
