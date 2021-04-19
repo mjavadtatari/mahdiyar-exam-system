@@ -45,6 +45,12 @@
                         {% if profile.user.is_superuser %}
                             <a class="collapse-item" href="{% url 'dashboard:academy_create' %}">افزودن آموزشگاه</a>
                             <a class="collapse-item" href="{% url 'dashboard:academy_manage' %}">مدیریت آموزشگاه ها</a>
+                        {% elif profile.user.is_teacher %}
+                            {% for aca in profile.show_all_academies %}
+                                <a class="collapse-item"
+                                   href="{% url 'dashboard:academy_view' aca_id=aca.pk %}">{{ aca }}</a>
+                            {% endfor %}
+
                         {% else %}
                             <a class="collapse-item"
                                href="{% url 'dashboard:academy_view' aca_id=profile.academy.pk %}">{{ profile.academy }}</a>

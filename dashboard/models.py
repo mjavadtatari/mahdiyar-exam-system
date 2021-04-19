@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group, Permission, AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.db import models
+from django.db import models, IntegrityError
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from jalali_date import date2jalali
@@ -104,6 +104,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.user.user_type_is(), self.user.get_full_name())
+
+    def show_all_academies(self):
+        aca_list = []
+        for i in self.klass.all():
+            if i.academy not in aca_list:
+                aca_list.append(i.academy)
+        return aca_list
 
     def show_birth_date_in_jalali(self):
         return date2jalali(self.birth_date).strftime('%Y/%m/%d')
@@ -622,6 +629,8 @@ class SignUpKey(models.Model):
 def create_klass_signup_key(sender, instance, created, **kwargs):
     if created:
         while True:
-            temp_signup_key = SignUpKey.objects.create(klass=instance)
-            if temp_signup_key:
-                break
+            try:
+                SignUpKey.objects.create(klass=instance)
+            except IntegrityError as e:
+                continue
+            break

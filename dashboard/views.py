@@ -774,8 +774,10 @@ def klass_manage_view(request):
     profile = Profile.objects.get(user=request.user)
     if profile.user.is_superuser:
         all_object = Klass.objects.all()
-    else:
+    elif profile.user.is_supervisor:
         all_object = Klass.objects.filter(academy=profile.academy)
+    elif profile.user.is_teacher:
+        all_object = Klass.objects.filter(teacher=profile)
     if request.method == 'POST':
         if request.POST.get('search_content'):
             all_object = all_object
