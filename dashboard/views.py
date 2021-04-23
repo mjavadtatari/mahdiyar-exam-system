@@ -778,6 +778,7 @@ def klass_manage_view(request):
         all_object = Klass.objects.filter(academy=profile.academy)
     elif profile.user.is_teacher:
         all_object = Klass.objects.filter(teacher=profile)
+        print(all_object)
     if request.method == 'POST':
         if request.POST.get('search_content'):
             all_object = all_object
@@ -1440,6 +1441,8 @@ def supervisor_exam_klass_list(request):
     output_msg = None
     if profile.user.is_superuser:
         all_klass = Klass.objects.all()
+    elif profile.user.is_teacher:
+        all_klass = Klass.objects.filter(teacher=profile)
     else:
         all_klass = Klass.objects.filter(academy=profile.academy)
     if all_klass.count() == 0:
