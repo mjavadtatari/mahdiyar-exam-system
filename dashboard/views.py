@@ -1384,6 +1384,7 @@ def exam_end_view(request, exa_id):
 
 
 @login_required
+@permission_required(['dashboard.view_exam', 'dashboard.change_exam', 'dashboard.delete_exam'], raise_exception=True)
 def exam_score_view(request):
     # g_i_a_v = goes_in_all_view(request)
     profile = Profile.objects.get(user=request.user)
