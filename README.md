@@ -1,4 +1,4 @@
-**An Online Exam System App!**\
+**An Online Exam System Web App!**\
 Powered by **Django 3** & **Python 3**
 
 All requirements placed in `requirements.txt`\
